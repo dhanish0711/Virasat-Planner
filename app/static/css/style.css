@@ -470,3 +470,162 @@ label.is-required::after {
   line-height: 1;
   margin-bottom: 0.25rem;
 }
+
+/* ========================================================================== */
+/* AI ADVISOR RESPONSE STYLING & MARKDOWN TYPOGRAPHY */
+/* ========================================================================== */
+.advisor-markdown {
+  color: #1e293b;
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.65;
+  font-family: inherit;
+}
+
+.advisor-markdown h1,
+.advisor-markdown h2,
+.advisor-markdown h3,
+.advisor-markdown h4 {
+  font-family: 'Playfair Display', Georgia, serif;
+  color: #0f172a;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.advisor-markdown h1 {
+  font-size: 1.05rem;
+  border-bottom: 2px solid #0d9488;
+  padding-bottom: 0.25rem;
+  color: #042f2e;
+}
+
+.advisor-markdown h2 {
+  font-size: 0.95rem;
+  color: #0f766e;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.2rem;
+}
+
+.advisor-markdown h3 {
+  font-size: 0.875rem;
+  color: #115e59;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.advisor-markdown h4 {
+  font-size: 0.8125rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  color: #334155;
+}
+
+.advisor-markdown p {
+  margin-bottom: 0.65rem;
+}
+
+.advisor-markdown p:last-child {
+  margin-bottom: 0;
+}
+
+.advisor-markdown strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.advisor-markdown em {
+  font-style: italic;
+  color: #334155;
+}
+
+.advisor-markdown ul {
+  list-style-type: disc !important;
+  padding-left: 1.35rem !important;
+  margin-top: 0.4rem;
+  margin-bottom: 0.65rem;
+  space-y: 0.35rem;
+}
+
+.advisor-markdown ol {
+  list-style-type: decimal !important;
+  padding-left: 1.35rem !important;
+  margin-top: 0.4rem;
+  margin-bottom: 0.65rem;
+  space-y: 0.35rem;
+}
+
+.advisor-markdown li {
+  margin-bottom: 0.3rem;
+  padding-left: 0.15rem;
+  line-height: 1.55;
+}
+
+.advisor-markdown li strong {
+  color: #0f172a;
+}
+
+.advisor-markdown blockquote {
+  border-left: 3px solid #0d9488;
+  background-color: #f0fdfa;
+  padding: 0.5rem 0.85rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  margin: 0.65rem 0;
+  color: #115e59;
+  font-style: normal;
+  border-top: 1px solid #ccfbf1;
+  border-right: 1px solid #ccfbf1;
+  border-bottom: 1px solid #ccfbf1;
+}
+
+.advisor-markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75rem 0;
+  font-size: 0.75rem;
+  background: #ffffff;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+}
+
+.advisor-markdown th,
+.advisor-markdown td {
+  border: 1px solid #e2e8f0;
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+}
+
+.advisor-markdown th {
+  background-color: #0f766e;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.advisor-markdown tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+.advisor-markdown tr:hover {
+  background-color: #f1f5f9;
+}
+
+.advisor-markdown code {
+  background-color: #f1f5f9;
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  color: #0d9488;
+  border: 1px solid #e2e8f0;
+}
+
+.advisor-markdown hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 0.85rem 0;
+}

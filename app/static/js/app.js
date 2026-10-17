@@ -2474,8 +2474,128 @@ function filterTracker(filterType) {
 }
 
 // -------------------------------------------------------------
-// PANE 9: AI FAMILY LEGACY ADVISOR CHAT
+// PANE 9: AI FAMILY LEGACY ADVISOR CHAT & MARKDOWN PARSER
 // -------------------------------------------------------------
+function formatAdvisorMarkdown(text) {
+  if (!text) return "";
+
+  // Normalize whitespace & narrow spaces that sometimes come from LLMs
+  let cleaned = text.replace(/[\u202f\u00a0]/g, " ").replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+  // 1. If marked.js is available (loaded via CDN), use it with GFM and line breaks
+  if (typeof marked !== "undefined" && typeof marked.parse === "function") {
+    try {
+      marked.setOptions({
+        gfm: true,
+        breaks: true
+      });
+      let html = marked.parse(cleaned);
+      // Ensure tables are wrapped in a responsive scrollable container
+      html = html.replace(/<table>/g, '<div class="overflow-x-auto my-2.5"><table>').replace(/<\/table>/g, '</table></div>');
+      return html;
+    } catch (e) {
+      console.warn("Marked parser failed, falling back to built-in parser:", e);
+    }
+  }
+
+  // 2. Comprehensive built-in Markdown Parser
+  // First, extract and format tables
+  cleaned = cleaned.replace(/(?:^|\n)(\|.+?\|\n\|[-:| ]+?\|\n(?:\|.+?\|\n?)+)/g, function(match, tableBlock) {
+    const lines = tableBlock.trim().split("\n");
+    if (lines.length < 3) return match;
+    const headerCells = lines[0].split("|").filter((c, i, a) => i > 0 && i < a.length - 1).map(c => c.trim());
+    const rowLines = lines.slice(2);
+
+    let html = '<div class="overflow-x-auto my-2.5"><table><thead><tr>';
+    headerCells.forEach(h => { html += `<th>${formatInlineMarkdown(h)}</th>`; });
+    html += '</tr></thead><tbody>';
+    rowLines.forEach(r => {
+      const cells = r.split("|").filter((c, i, a) => i > 0 && i < a.length - 1).map(c => c.trim());
+      html += '<tr>';
+      cells.forEach(c => { html += `<td>${formatInlineMarkdown(c)}</td>`; });
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+    return "\n" + html + "\n";
+  });
+
+  // Process line by line
+  const lines = cleaned.split("\n");
+  let out = [];
+  let inUl = false;
+  let inOl = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i];
+
+    // Already-generated HTML blocks (e.g. table)
+    if (line.includes("<table") || line.includes("</table>") || line.includes("<tr>") || line.includes("<td>") || line.includes("<th>")) {
+      if (inUl) { out.push("</ul>"); inUl = false; }
+      if (inOl) { out.push("</ol>"); inOl = false; }
+      out.push(line);
+      continue;
+    }
+
+    // Unordered lists (- or * or •)
+    let ulMatch = line.match(/^(\s*)[-*•]\s+(.+)$/);
+    if (ulMatch) {
+      if (inOl) { out.push("</ol>"); inOl = false; }
+      if (!inUl) { out.push('<ul>'); inUl = true; }
+      out.push(`<li>${formatInlineMarkdown(ulMatch[2])}</li>`);
+      continue;
+    }
+
+    // Ordered lists (1. or 1))
+    let olMatch = line.match(/^(\s*)\d+[.)]\s+(.+)$/);
+    if (olMatch) {
+      if (inUl) { out.push("</ul>"); inUl = false; }
+      if (!inOl) { out.push('<ol>'); inOl = true; }
+      out.push(`<li>${formatInlineMarkdown(olMatch[2])}</li>`);
+      continue;
+    }
+
+    // Close any active lists
+    if (inUl) { out.push("</ul>"); inUl = false; }
+    if (inOl) { out.push("</ol>"); inOl = false; }
+
+    let trimmed = line.trim();
+    if (!trimmed) continue;
+
+    // Headings
+    if (trimmed.startsWith("#### ")) {
+      out.push(`<h4>${formatInlineMarkdown(trimmed.substring(5))}</h4>`);
+    } else if (trimmed.startsWith("### ")) {
+      out.push(`<h3>${formatInlineMarkdown(trimmed.substring(4))}</h3>`);
+    } else if (trimmed.startsWith("## ")) {
+      out.push(`<h2>${formatInlineMarkdown(trimmed.substring(3))}</h2>`);
+    } else if (trimmed.startsWith("# ")) {
+      out.push(`<h1>${formatInlineMarkdown(trimmed.substring(2))}</h1>`);
+    } else if (trimmed.startsWith("> ")) {
+      out.push(`<blockquote>${formatInlineMarkdown(trimmed.substring(2))}</blockquote>`);
+    } else if (trimmed === "---" || trimmed === "***") {
+      out.push('<hr/>');
+    } else {
+      out.push(`<p>${formatInlineMarkdown(trimmed)}</p>`);
+    }
+  }
+
+  if (inUl) out.push("</ul>");
+  if (inOl) out.push("</ol>");
+
+  return out.join("\n");
+}
+
+function formatInlineMarkdown(str) {
+  if (!str) return "";
+  return escapeHtml(str)
+    .replace(/&lt;br\s*\/?&gt;/gi, '<br/>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/__(.+?)__/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/_(.+?)_/g, '<em>$1</em>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+
 function renderLegacyAdvisorPane() {
   const stream = document.getElementById("advisor-chat-stream");
   if (!stream) return;
@@ -2510,23 +2630,20 @@ function renderLegacyAdvisorPane() {
         </div>
       `;
     } else {
-      let formatted = escapeHtml(msg.content)
-        .replace(/### (.*?)\n/g, '<h4 class="font-black text-sm text-stone-900 mt-2 mb-1">$1</h4>')
-        .replace(/#### (.*?)\n/g, '<h5 class="font-bold text-xs text-stone-800 mt-2 mb-1">$1</h5>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/\n\n/g, '<br/><br/>')
-        .replace(/\n- (.*?)/g, '<li class="ml-4 list-disc text-stone-700">$1</li>');
+      let formatted = formatAdvisorMarkdown(msg.content);
 
       let actionPills = "";
       if (msg.action_items && msg.action_items.length > 0) {
         actionPills = `
-          <div class="mt-3 pt-2 border-t border-stone-200">
-            <div class="text-[10px] font-bold uppercase text-stone-500 mb-1.5">Actionable Next Steps:</div>
-            <div class="space-y-1">
+          <div class="mt-3.5 pt-2.5 border-t border-stone-200">
+            <div class="text-[10px] font-bold uppercase tracking-wider text-teal-800 mb-1.5 flex items-center gap-1">
+              <span>🎯</span><span>Actionable Next Steps:</span>
+            </div>
+            <div class="space-y-1.5">
               ${msg.action_items.map(a => `
-                <div class="flex items-center gap-2 text-xs font-semibold text-teal-900 bg-teal-50/80 px-2.5 py-1.5 rounded-lg border border-teal-200/60">
-                  <span class="text-teal-700">✓</span><span>${escapeHtml(a)}</span>
+                <div class="flex items-start gap-2 text-xs font-semibold text-teal-950 bg-teal-50/90 px-3 py-2 rounded-lg border border-teal-200/70 shadow-2xs">
+                  <span class="text-teal-700 font-bold shrink-0 mt-0.5">✓</span>
+                  <span class="leading-snug">${escapeHtml(a)}</span>
                 </div>
               `).join("")}
             </div>
@@ -2537,10 +2654,10 @@ function renderLegacyAdvisorPane() {
       let followupBtns = "";
       if (msg.suggested_followups && msg.suggested_followups.length > 0) {
         followupBtns = `
-          <div class="mt-3 pt-2 border-t border-stone-100 flex items-center gap-1.5 flex-wrap">
-            <span class="text-[10px] font-bold text-stone-400">Ask Next:</span>
+          <div class="mt-3.5 pt-2.5 border-t border-stone-100 flex items-center gap-1.5 flex-wrap">
+            <span class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Ask Next:</span>
             ${msg.suggested_followups.map(f => `
-              <button onclick="askAdvisorQuery('${escapeHtml(f).replace(/'/g, "\\'")}')" class="px-2.5 py-1 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 text-[11px] font-semibold transition cursor-pointer">
+              <button onclick="askAdvisorQuery('${escapeHtml(f).replace(/'/g, "\\'")}')" class="px-3 py-1 rounded-full bg-stone-100 hover:bg-teal-50 hover:text-teal-900 hover:border-teal-300 border border-stone-200 text-stone-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs">
                 ${escapeHtml(f)} &rarr;
               </button>
             `).join("")}
@@ -2550,20 +2667,22 @@ function renderLegacyAdvisorPane() {
 
       let providerBadge = "";
       if (msg.ai_provider) {
-        providerBadge = `<span class="text-[9px] px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 font-bold border border-teal-200">⚡ ${escapeHtml(msg.ai_provider)}</span>`;
+        providerBadge = `<span class="text-[9px] px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800 font-bold border border-teal-300 shadow-2xs">⚡ ${escapeHtml(msg.ai_provider)}</span>`;
       }
 
       return `
         <div class="flex items-start gap-3">
-          <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-900 font-black flex items-center justify-center text-sm border border-amber-300 shrink-0">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-100 to-amber-200 text-amber-900 font-black flex items-center justify-center text-sm border border-amber-300 shadow-xs shrink-0 mt-0.5">
             ⚖️
           </div>
-          <div class="bg-stone-50 border border-stone-200/80 rounded-2xl rounded-tl-xs p-4 max-w-2xl text-xs space-y-2 shadow-xs">
-            <div class="flex items-center justify-between pb-1 border-b border-stone-200/60">
-              <span class="font-bold text-stone-700 text-[11px]">Waaris AI Legal Advisor</span>
+          <div class="bg-white border border-stone-200 rounded-2xl rounded-tl-xs p-4 sm:p-5 max-w-3xl w-full text-xs shadow-xs space-y-2">
+            <div class="flex items-center justify-between pb-2 border-b border-stone-200/80">
+              <span class="font-bold text-stone-800 text-[12px] flex items-center gap-1.5">
+                <span>Waaris AI Legal Advisor</span>
+              </span>
               ${providerBadge}
             </div>
-            <div class="text-stone-800 leading-relaxed">${formatted}</div>
+            <div class="advisor-markdown text-stone-800 leading-relaxed">${formatted}</div>
             ${actionPills}
             ${followupBtns}
           </div>
