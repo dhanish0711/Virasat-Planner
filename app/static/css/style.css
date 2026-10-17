@@ -1,0 +1,472 @@
+/* Custom VirasatPlanner styling - Heritage Luxury & Generational Walk */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Rozha+One&display=swap');
+
+:root {
+  --primary-emerald: #0b3d32;
+  --emerald-sidebar: #07261f;
+  --emerald-card: #0f4b3d;
+  --accent-gold: #c59b27;
+  --accent-gold-light: #e6c66e;
+  --accent-saffron: #d97706;
+  --bg-sand: #fbf9f5;
+  --card-border: #ede6da;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-sand);
+  color: #1e293b;
+}
+
+.serif-title {
+  font-family: 'Playfair Display', serif;
+}
+
+.brand-font {
+  font-family: 'Rozha One', serif;
+}
+
+/* Sidebar Emerald Theme */
+.sidebar-emerald {
+  background: linear-gradient(180deg, #03261f 0%, #021a15 100%);
+  border-right: 1px solid rgba(226, 185, 82, 0.12);
+  scrollbar-width: none;
+}
+.sidebar-emerald::-webkit-scrollbar {
+  display: none;
+}
+
+.side-nav-item {
+  color: #d1ded9;
+  border: none;
+  background: transparent;
+  transition: all 0.18s ease-in-out;
+  border-radius: 0 12px 12px 0;
+  margin-right: 14px;
+  position: relative;
+  text-align: left;
+}
+
+.side-nav-item .active-indicator {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) scaleY(0.3);
+  width: 4px;
+  height: 26px;
+  background: #c59b27;
+  border-radius: 0 4px 4px 0;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.side-nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.side-nav-item:hover svg {
+  color: #e2b952;
+}
+
+.side-nav-item.active {
+  background-color: #264a3d;
+  color: #dcd796;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.side-nav-item.active .active-indicator {
+  opacity: 1;
+  transform: translateY(-50%) scaleY(1);
+}
+
+.side-nav-item.active .nav-label {
+  color: #dcd796;
+  font-weight: 600;
+}
+
+.side-nav-item.active svg {
+  color: #c59b27;
+  filter: drop-shadow(0 1px 3px rgba(197, 155, 39, 0.35));
+}
+
+/* ========================================================================== */
+/* PANORAMIC WALKING BANNER & 3D CHARACTER SPRITES ENGINE */
+/* ========================================================================== */
+.walking-banner-container {
+  background-color: #f5eedf;
+  box-shadow: 0 4px 12px -2px rgba(90, 60, 20, 0.08);
+}
+
+.banner-scenic-bg {
+  background-position: center bottom;
+  background-size: cover;
+  transition: transform 0.5s ease-out;
+}
+
+/* Floating Golden Autumn Leaves */
+.floating-leaf {
+  position: absolute;
+  pointer-events: none;
+  font-size: 14px;
+  opacity: 0;
+  user-select: none;
+}
+
+.leaf-1 {
+  top: 10px;
+  right: 15%;
+  animation: leafDrift 14s linear infinite;
+}
+.leaf-2 {
+  top: 5px;
+  right: 35%;
+  animation: leafDrift 18s linear 4s infinite;
+}
+.leaf-3 {
+  top: 25px;
+  right: 55%;
+  animation: leafDrift 16s linear 8s infinite;
+}
+.leaf-4 {
+  top: 15px;
+  right: 75%;
+  animation: leafDrift 20s linear 12s infinite;
+}
+
+@keyframes leafDrift {
+  0% {
+    transform: translate3d(0, -15px, 0) rotate(0deg) scale(0.9);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  85% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate3d(-380px, 130px, 0) rotate(380deg) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* Walk Cycle Speed Variables - Synchronized with 4-Frame Leg Cycle */
+:root {
+  --walk-cycle-dur: 1.10s;
+}
+
+/* Ground Shadows with Soft Contact Occlusion */
+.walker-shadow {
+  transform-origin: center center;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  animation: naturalShadow var(--walk-cycle-dur, 1.10s) ease-in-out infinite;
+}
+
+@keyframes naturalShadow {
+  0%, 50%, 100% {
+    transform: scale(1.05, 1.0);
+    opacity: 0.30;
+  }
+  25%, 75% {
+    transform: scale(0.92, 0.88);
+    opacity: 0.18;
+  }
+}
+
+/* Natural Step Vertical Bobbing (Synchronized with 4-Frame Foot Lift) */
+.char-dada-anim,
+.char-father-anim,
+.char-boy-anim,
+.char-kid-anim {
+  transform-origin: center bottom;
+  animation: naturalStepBob var(--walk-cycle-dur, 1.10s) ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes naturalStepBob {
+  0%, 50%, 100% {
+    transform: translateY(0px);
+  }
+  25%, 75% {
+    transform: translateY(-2.5px);
+  }
+}
+
+/* Paused State */
+.walking-paused .char-sprite,
+.walking-paused .walker-shadow {
+  animation-play-state: paused !important;
+}
+
+/* Hover glow & polish on walkers */
+.walker-unit {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.walker-unit:hover {
+  transform: translateY(-3px) scale(1.04);
+}
+.walker-unit:hover .char-sprite {
+  filter: drop-shadow(0 6px 14px rgba(217, 119, 6, 0.4)) brightness(1.06);
+}
+
+/* Reverse stroll compensation so text labels and speech bubble are never mirrored */
+#walking-family-group.is-reversed #family-speech-bubble,
+#walking-family-group.is-reversed .char-hover-pill {
+  transform: scaleX(-1);
+}
+
+/* Joyful Character Jump Animation on Click */
+.animate-char-jump {
+  animation: charJoyJump 0.55s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+@keyframes charJoyJump {
+  0% { transform: translateY(0px) scale(1); }
+  35% { transform: translateY(-16px) scale(1.08, 0.95); }
+  60% { transform: translateY(-8px) scale(0.98, 1.02); }
+  100% { transform: translateY(0px) scale(1); }
+}
+
+/* Speech Bubble Animation */
+.bubble-pop {
+  animation: bubblePop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes bubblePop {
+  from { opacity: 0; transform: translate(-50%, 8px) scale(0.92); }
+  to { opacity: 1; transform: translate(-50%, 0px) scale(1); }
+}
+
+/* ========================================================================== */
+/* CARDS & LUXURY METRICS */
+/* ========================================================================== */
+.heritage-card {
+  background: #ffffff;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 4px 16px -2px rgba(80, 50, 20, 0.04);
+  border-radius: 1.25rem;
+  transition: all 0.25s ease-in-out;
+}
+
+.heritage-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -4px rgba(80, 50, 20, 0.08);
+  border-color: #dfd4c4;
+}
+
+/* Sparklines */
+.sparkline-svg {
+  width: 70px;
+  height: 24px;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1ede5;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ========================================================================== */
+/* UI/UX PRINCIPLE 1: ACCESSIBILITY, FOCUS INDICATORS & SKIP LINK */
+/* ========================================================================== */
+.skip-link {
+  position: fixed;
+  top: -120px;
+  left: 1.5rem;
+  background: var(--primary-emerald, #092b23);
+  color: #f7e7be;
+  padding: 0.75rem 1.25rem;
+  font-weight: 800;
+  font-size: 0.875rem;
+  border-radius: 0.75rem;
+  border: 2px solid var(--accent-gold, #c59b27);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.45);
+  z-index: 99999;
+  transition: top 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 1.5rem;
+  outline: 3px solid #ffffff !important;
+  outline-offset: 3px !important;
+}
+
+/* Explicit High Contrast Focus Rings (WCAG 2.4.7 AA) */
+:focus-visible {
+  outline: 2px solid #c59b27 !important;
+  outline-offset: 2px !important;
+}
+
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2.5px solid #c59b27 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(197, 155, 39, 0.18) !important;
+}
+
+/* High Contrast Mode fallback (Forced Colors) */
+@media (forced-colors: active) {
+  :focus-visible,
+  button:focus-visible,
+  a:focus-visible {
+    outline: 3px solid Highlight !important;
+    outline-offset: 3px !important;
+  }
+}
+
+/* ========================================================================== */
+/* UI/UX PRINCIPLE 2: MOTION SENSITIVITY (prefers-reduced-motion) */
+/* ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .floating-leaf {
+    display: none !important;
+  }
+  .walker-shadow {
+    animation: none !important;
+  }
+  .char-dada-anim,
+  .char-father-anim,
+  .char-boy-anim,
+  .char-kid-anim {
+    animation: none !important;
+  }
+}
+
+/* ========================================================================== */
+/* UI/UX PRINCIPLE 3: FORM USABILITY & VALIDATION FEEDBACK */
+/* ========================================================================== */
+input:user-invalid,
+select:user-invalid,
+textarea:user-invalid {
+  border-color: #e11d48 !important;
+  background-color: #fff1f2 !important;
+}
+
+input:user-invalid:focus,
+select:user-invalid:focus,
+textarea:user-invalid:focus {
+  outline-color: #e11d48 !important;
+  box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.15) !important;
+}
+
+/* Required field visual indicator */
+label.is-required::after {
+  content: " *";
+  color: #e11d48;
+  font-weight: 700;
+}
+
+/* ========================================================================== */
+/* UI/UX PRINCIPLE 4: ERGONOMICS & MINIMUM TOUCH TARGETS (WCAG 2.5.8 AA) */
+/* ========================================================================== */
+@media (pointer: coarse) {
+  button,
+  .side-nav-item,
+  select,
+  input[type="text"],
+  input[type="number"],
+  input[type="password"],
+  a.nav-touch-target {
+    min-height: 44px;
+  }
+}
+
+/* ========================================================================== */
+/* UI/UX PRINCIPLE 5: INFORMATIVE TOOLTIPS & MICROCOPY */
+/* ========================================================================== */
+.legal-tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: help;
+}
+
+.legal-tooltip-wrapper .tooltip-bubble {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background-color: #0f172a;
+  color: #f8fafc;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  line-height: 1.35;
+  white-space: normal;
+  width: max-content;
+  max-width: 260px;
+  z-index: 60;
+  box-shadow: 0 8px 20px -3px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  pointer-events: none;
+}
+
+.legal-tooltip-wrapper .tooltip-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #0f172a transparent transparent transparent;
+}
+
+.legal-tooltip-wrapper:hover .tooltip-bubble,
+.legal-tooltip-wrapper:focus-within .tooltip-bubble {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ========================================================================== */
+/* UI/UX PRINCIPLE 6: WELCOMING EMPTY STATES */
+/* ========================================================================== */
+.empty-state-card {
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  background: #ffffff;
+  border: 2px dashed #e2d9cc;
+  border-radius: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.empty-state-card .empty-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}

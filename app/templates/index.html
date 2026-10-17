@@ -1,0 +1,2364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ app_name }} — Smart Succession Planner for Indian Traders</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Custom Styling -->
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-[#fbf9f5] text-slate-900 min-h-screen flex antialiased">
+
+  <!-- A11Y SKIP LINK: Allows keyboard users to bypass navigation -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Mobile Drawer Backdrop Overlay -->
+  <div id="mobile-sidebar-backdrop" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-30 transition-opacity duration-300 hidden lg:hidden" aria-hidden="true"></div>
+
+  <!-- ======================================================================== -->
+  <!-- 0. AUTHENTICATION & REGISTRATION PORTAL (Shown when unauthenticated) -->
+  <!-- ======================================================================== -->
+  <div id="auth-landing-view" class="fixed inset-0 z-50 bg-[#fbf9f5] overflow-y-auto flex flex-col min-h-screen">
+    <!-- Top Nav / Header on Login Page -->
+    <header class="bg-white/95 backdrop-blur-md border-b border-[#e6dcce] px-6 py-3 flex items-center justify-between shadow-xs sticky top-0 z-10">
+      <div class="flex items-center gap-3">
+        <img src="/static/gold_tree_emblem.png" alt="VirasatPlanner Logo" class="h-9 w-9 object-contain drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)]" />
+        <div>
+          <div class="font-bold text-[#092b23] text-lg tracking-tight serif-title leading-tight">VirasatPlanner</div>
+          <div class="text-[11px] text-[#8c734b] font-medium">Multi-Generational Wealth, Asset & Succession Vault</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <!-- Language Switcher -->
+        <div class="inline-flex items-center rounded-xl border border-stone-200 bg-stone-100 p-0.5 text-xs font-semibold shadow-2xs" role="group" aria-label="Portal language selection">
+          <button onclick="setLanguage('en')" class="px-2.5 py-1 rounded-lg transition font-bold text-stone-700 hover:text-stone-900 cursor-pointer">English</button>
+          <button onclick="setLanguage('hi')" class="px-2.5 py-1 rounded-lg transition font-semibold text-stone-600 hover:text-stone-900 cursor-pointer">हिन्दी</button>
+          <button onclick="setLanguage('hinglish')" class="px-2.5 py-1 rounded-lg transition font-semibold text-stone-600 hover:text-stone-900 cursor-pointer">Hinglish</button>
+        </div>
+        <span class="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Confidential Vault Locked
+        </span>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <div class="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-8 items-center justify-center my-auto">
+      
+      <!-- Left Hero Column: Platform Overview & Legal Value Proposition -->
+      <div class="flex-1 flex flex-col justify-center space-y-5 lg:pr-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-900 text-xs font-bold w-fit shadow-2xs">
+          <span>🏛️</span>
+          <span>Indian Succession Act 1925 & Hindu Succession Act 1956</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-[#092b23] serif-title tracking-tight leading-[1.18]">
+          Protect What You Built.<br>
+          <span class="text-[#c29c4e] italic">Plan What Comes Next.</span>
+        </h1>
+
+        <p class="text-stone-600 text-xs sm:text-sm leading-relaxed max-w-xl">
+          A confidential, encrypted platform engineered specifically for Indian business families, traders, and coparceners to organize multi-generational estates, eliminate bank nominee discrepancies, and secure family harmony.
+        </p>
+
+        <!-- 4 Core Pillars Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 max-w-xl">
+          <div class="p-3.5 rounded-xl bg-white border border-[#ede6da] shadow-2xs">
+            <div class="text-xl mb-1">👨‍👩‍👧‍👦</div>
+            <div class="font-bold text-stone-900 text-xs">Family Tree & Coparcenary</div>
+            <div class="text-[11px] text-stone-500 mt-0.5">Track Class-1 legal heirs, coparceners, and Vineeta Sharma daughter parity.</div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-white border border-[#ede6da] shadow-2xs">
+            <div class="text-xl mb-1">🏦</div>
+            <div class="font-bold text-stone-900 text-xs">Nominee vs Will Audit</div>
+            <div class="text-[11px] text-stone-500 mt-0.5">Harmonize bank & demat nominations under the Supreme Court Sarbati Devi doctrine.</div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-white border border-[#ede6da] shadow-2xs">
+            <div class="text-xl mb-1">📜</div>
+            <div class="font-bold text-stone-900 text-xs">Testamentary Will Engine</div>
+            <div class="text-[11px] text-stone-500 mt-0.5">Generate formal SRO-ready legal wills with doctor's certification and Book 3 guidance.</div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-white border border-[#ede6da] shadow-2xs">
+            <div class="text-xl mb-1">🤖</div>
+            <div class="font-bold text-stone-900 text-xs">AI Legacy Advisor (Groq)</div>
+            <div class="text-[11px] text-stone-500 mt-0.5">High-speed legal advice in English, Hindi & Hinglish with live statutory citations.</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 text-xs text-stone-500 pt-1">
+          <span class="flex items-center gap-1 font-medium">🔒 Salted PBKDF2</span>
+          <span>•</span>
+          <span class="flex items-center gap-1 font-medium">🛡️ AES-256 Fernet Vault</span>
+          <span>•</span>
+          <span class="flex items-center gap-1 font-medium">⚖️ Strict Role-Based Access</span>
+        </div>
+      </div>
+
+      <!-- Right Column: Authentication Card (Login / Register / 1-Click Demo) -->
+      <div class="w-full lg:max-w-md flex flex-col justify-center">
+        <div class="bg-white rounded-2xl border border-[#e6dcce] shadow-xl p-6 space-y-4">
+          
+          <!-- Auth Form Header & Tabs -->
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <h2 class="text-base font-bold text-stone-900 serif-title">Estate Access Portal</h2>
+                <p class="text-xs text-stone-500">Sign in to access your confidential family estate records</p>
+              </div>
+              <span class="text-2xl" aria-hidden="true">🔐</span>
+            </div>
+
+            <!-- Tab Buttons: Sign In / Register -->
+            <div class="flex border-b border-stone-200 text-xs font-bold" role="tablist">
+              <button id="portal-tab-login-btn" onclick="showPortalAuthTab('login')" class="flex-1 py-2.5 text-center border-b-2 border-teal-700 text-teal-800 cursor-pointer">
+                Sign In
+              </button>
+              <button id="portal-tab-reg-btn" onclick="showPortalAuthTab('register')" class="flex-1 py-2.5 text-center border-b-2 border-transparent text-stone-500 hover:text-stone-800 cursor-pointer">
+                Register New Account
+              </button>
+            </div>
+          </div>
+
+          <!-- Tab 1: Sign In Form -->
+          <form id="portal-login-form" onsubmit="handlePortalLoginSubmit(event)" class="space-y-3 text-xs">
+            <div>
+              <label for="portal-login-username" class="block font-semibold text-stone-700 mb-1 is-required">Username</label>
+              <input type="text" id="portal-login-username" required placeholder="e.g. karta_sharma or rohit_heir" class="w-full border border-stone-300 rounded-xl p-2.5 bg-stone-50 font-mono text-xs focus:bg-white focus:ring-2 focus:ring-teal-600 focus:outline-none transition">
+            </div>
+            <div>
+              <label for="portal-login-password" class="block font-semibold text-stone-700 mb-1 is-required">Password</label>
+              <input type="password" id="portal-login-password" required placeholder="Enter password (e.g. Virasat@2026)" class="w-full border border-stone-300 rounded-xl p-2.5 bg-stone-50 text-xs focus:bg-white focus:ring-2 focus:ring-teal-600 focus:outline-none transition">
+            </div>
+
+            <div id="portal-login-error" class="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-[11px] font-semibold hidden" role="alert"></div>
+
+            <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-[#092b23] hover:bg-[#0e3d32] text-amber-100 font-bold text-xs shadow-md transition cursor-pointer flex items-center justify-center gap-2">
+              <span>Sign In to Estate Plan</span>
+              <span>→</span>
+            </button>
+          </form>
+
+          <!-- Tab 2: Register Form -->
+          <form id="portal-register-form" onsubmit="handlePortalRegisterSubmit(event)" class="space-y-2.5 text-xs hidden">
+            <div>
+              <label for="portal-reg-fullname" class="block font-semibold text-stone-700 mb-1 is-required">Full Name</label>
+              <input type="text" id="portal-reg-fullname" required placeholder="e.g. Priya Sharma" class="w-full border border-stone-300 rounded-xl p-2 bg-stone-50 text-xs focus:bg-white focus:ring-2 focus:ring-teal-600 focus:outline-none transition">
+            </div>
+            <div>
+              <label for="portal-reg-username" class="block font-semibold text-stone-700 mb-1 is-required">New Username</label>
+              <input type="text" id="portal-reg-username" required placeholder="e.g. priya_sharma" class="w-full border border-stone-300 rounded-xl p-2 bg-stone-50 font-mono text-xs focus:bg-white focus:ring-2 focus:ring-teal-600 focus:outline-none transition">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label for="portal-reg-role" class="block font-semibold text-stone-700 mb-1 is-required">Role</label>
+                <select id="portal-reg-role" class="w-full border border-stone-300 rounded-xl p-2 bg-stone-50 text-xs font-medium focus:bg-white focus:outline-none">
+                  <option value="heir">Heir (Read-Only)</option>
+                  <option value="patriarch">Patriarch / Karta</option>
+                  <option value="advisor">CA / Legal Advisor</option>
+                </select>
+              </div>
+              <div>
+                <label for="portal-reg-profile-id" class="block font-semibold text-stone-700 mb-1 is-required">Estate ID</label>
+                <input type="number" id="portal-reg-profile-id" required value="1" min="1" class="w-full border border-stone-300 rounded-xl p-2 bg-stone-50 font-mono text-xs focus:bg-white focus:outline-none">
+              </div>
+            </div>
+            <div>
+              <label for="portal-reg-password" class="block font-semibold text-stone-700 mb-1 is-required">Password (min 8 chars)</label>
+              <input type="password" id="portal-reg-password" required minlength="8" placeholder="Choose a secure password" class="w-full border border-stone-300 rounded-xl p-2 bg-stone-50 text-xs focus:bg-white focus:ring-2 focus:ring-teal-600 focus:outline-none transition">
+            </div>
+
+            <div id="portal-reg-error" class="p-2 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-[11px] font-semibold hidden" role="alert"></div>
+
+            <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-teal-800 hover:bg-teal-900 text-white font-bold text-xs shadow-md transition cursor-pointer flex items-center justify-center gap-2">
+              <span>Create Account & Enter</span>
+              <span>→</span>
+            </button>
+          </form>
+
+          <!-- 1-Click Fast Login / Demo Evaluation Panel -->
+          <div class="pt-3 border-t border-stone-200">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-extrabold text-stone-700 uppercase tracking-wider flex items-center gap-1">
+                <span>⚡</span> 1-Click Demo Evaluation Accounts
+              </span>
+              <span class="text-[10px] text-stone-500 font-mono">Pass: Virasat@2026</span>
+            </div>
+            <p class="text-[10.5px] text-stone-500 mb-2">
+              Click any persona below to authenticate with enforced role-based permissions:
+            </p>
+
+            <!-- Persona Buttons Grid -->
+            <div class="space-y-1.5">
+              <!-- Sharma Family -->
+              <div class="p-2 rounded-xl bg-stone-50 border border-stone-200">
+                <div class="text-[10px] font-bold text-stone-600 mb-1 flex items-center justify-between">
+                  <span>1. Sharma Estate (Kirana & Property)</span>
+                  <span class="text-teal-700 font-semibold">Delhi</span>
+                </div>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <button type="button" onclick="quickPortalLogin('karta_sharma', 1)" class="py-1 px-1.5 rounded-lg bg-white hover:bg-teal-50 border border-teal-300 text-teal-900 font-bold text-[10px] text-center transition cursor-pointer shadow-2xs">
+                    👑 Karta (Admin)
+                  </button>
+                  <button type="button" onclick="quickPortalLogin('rohit_heir', 1)" class="py-1 px-1.5 rounded-lg bg-white hover:bg-blue-50 border border-blue-300 text-blue-900 font-bold text-[10px] text-center transition cursor-pointer shadow-2xs">
+                    🧒 Rohit (Heir)
+                  </button>
+                  <button type="button" onclick="quickPortalLogin('advisor_chawla', 1)" class="py-1 px-1.5 rounded-lg bg-white hover:bg-amber-50 border border-amber-300 text-amber-900 font-bold text-[10px] text-center transition cursor-pointer shadow-2xs">
+                    ⚖️ CA Chawla
+                  </button>
+                </div>
+              </div>
+
+              <!-- Gupta Family -->
+              <div class="p-2 rounded-xl bg-stone-50 border border-stone-200">
+                <div class="text-[10px] font-bold text-stone-600 mb-1 flex items-center justify-between">
+                  <span>2. Gupta Estate (Jewellery & Bullion)</span>
+                  <span class="text-teal-700 font-semibold">Chandni Chowk</span>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <button type="button" onclick="quickPortalLogin('karta_gupta', 2)" class="py-1 px-1.5 rounded-lg bg-white hover:bg-teal-50 border border-teal-300 text-teal-900 font-bold text-[10px] text-center transition cursor-pointer shadow-2xs">
+                    👑 Karta Gupta
+                  </button>
+                  <button type="button" onclick="quickPortalLogin('vikas_heir', 2)" class="py-1 px-1.5 rounded-lg bg-white hover:bg-blue-50 border border-blue-300 text-blue-900 font-bold text-[10px] text-center transition cursor-pointer shadow-2xs">
+                    🧒 Vikas (Heir)
+                  </button>
+                </div>
+              </div>
+
+              <!-- Verma Family -->
+              <div class="p-2 rounded-xl bg-stone-50 border border-stone-200">
+                <div class="text-[10px] font-bold text-stone-600 mb-1 flex items-center justify-between">
+                  <span>3. Verma Estate (Karol Bagh HUF)</span>
+                  <span class="text-teal-700 font-semibold">Delhi</span>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <button type="button" onclick="quickPortalLogin('karta_verma', 3)" class="py-1 px-1.5 rounded-lg bg-white hover:bg-teal-50 border border-teal-300 text-teal-900 font-bold text-[10px] text-center transition cursor-pointer shadow-2xs">
+                    👑 Karta Verma
+                  </button>
+                  <button type="button" onclick="quickPortalLogin('anjali_heir', 3)" class="py-1 px-1.5 rounded-lg bg-white hover:bg-blue-50 border border-blue-300 text-blue-900 font-bold text-[10px] text-center transition cursor-pointer shadow-2xs">
+                    🧒 Anjali (Daughter)
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer of Login Page -->
+    <footer class="py-2.5 px-6 text-center text-xs text-stone-500 border-t border-[#ede6da] bg-white">
+      VirasatPlanner © 2026 • Private Family Asset & Succession Platform • Indian Succession Act 1925 • Hindu Succession Act 1956 (amended 2005)
+    </footer>
+  </div>
+
+  <!-- ======================================================================== -->
+  <!-- 1. LEFT SIDEBAR (Dark Emerald #092b23 with Ornate Gold Accents & Mobile Drawer) -->
+  <!-- ======================================================================== -->
+  <aside id="main-sidebar" class="sidebar-emerald w-64 min-w-[260px] text-white flex flex-col justify-between fixed lg:sticky top-0 bottom-0 h-screen select-none z-40 lg:z-30 shadow-2xl overflow-y-auto transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0" aria-label="Primary sidebar navigation">
+    
+    <div class="flex-1 flex flex-col">
+      <!-- Top Branding -->
+      <div class="p-5 pb-4 flex items-center justify-between">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="selectTab('dashboard')">
+          <img src="/static/gold_tree_emblem.png" alt="VirasatPlanner Tree Logo" class="h-10 w-10 object-contain drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)]" />
+          <div>
+            <div class="font-bold text-white text-[19px] tracking-tight serif-title leading-tight">VirasatPlanner</div>
+            <div class="text-[10.5px] text-[#b5c7bc] tracking-wide font-normal mt-0.5">Plan Today, Preserve Tomorrow</div>
+          </div>
+        </div>
+        <button onclick="toggleMobileSidebar(false)" class="lg:hidden text-amber-200 hover:text-white p-1.5 rounded-lg text-lg" aria-label="Close navigation sidebar">✕</button>
+      </div>
+
+      <!-- Navigation Menu Items -->
+      <nav class="py-2 flex-1" aria-label="Main Navigation">
+        <button onclick="selectTab('dashboard')" id="side-nav-dashboard" class="side-nav-item active w-full flex items-center gap-3.5 px-4 py-2.5 font-semibold text-sm transition cursor-pointer relative" aria-label="Dashboard">
+          <span class="active-indicator" aria-hidden="true"></span>
+          <svg class="w-5 h-5 text-[#c29c4e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 4h10l6 6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>
+            <path d="M14 4v6h6"/>
+            <path d="M9 22v-6a3 3 0 0 1 6 0v6"/>
+            <path d="M8 8h2"/>
+          </svg>
+          <span class="nav-label" id="nav-dashboard-text">Dashboard</span>
+        </button>
+
+        <button onclick="selectTab('family')" id="side-nav-family" class="side-nav-item w-full flex items-center gap-3.5 px-4 py-2.5 font-medium text-sm transition cursor-pointer relative" aria-label="Family Tree">
+          <span class="active-indicator" aria-hidden="true"></span>
+          <svg class="w-5 h-5 text-[#c29c4e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="5" r="2.5"/>
+            <circle cx="6" cy="19" r="2.5"/>
+            <circle cx="18" cy="19" r="2.5"/>
+            <path d="M12 7.5v4"/>
+            <path d="M6 16.5v-2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2"/>
+          </svg>
+          <span class="nav-label" id="nav-family-text">Family Tree</span>
+        </button>
+
+        <button onclick="selectTab('assets')" id="side-nav-assets" class="side-nav-item w-full flex items-center gap-3.5 px-4 py-2.5 font-medium text-sm transition cursor-pointer relative" aria-label="Asset Inventory">
+          <span class="active-indicator" aria-hidden="true"></span>
+          <svg class="w-5 h-5 text-[#c29c4e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 5h10a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/>
+            <path d="M8 8l-3 10a2 2 0 0 0 1.9 2.5h10.2a2 2 0 0 0 1.9-2.5L16 8"/>
+            <path d="M9.5 13l2.5 3.5 2.5-3.5"/>
+          </svg>
+          <span class="nav-label" id="nav-assets-text">Asset Inventory</span>
+        </button>
+
+        <button onclick="selectTab('will')" id="side-nav-will" class="side-nav-item w-full flex items-center gap-3.5 px-4 py-2.5 font-medium text-sm transition cursor-pointer relative" aria-label="Will & Succession">
+          <span class="active-indicator" aria-hidden="true"></span>
+          <svg class="w-5 h-5 text-[#c29c4e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h7"/>
+            <path d="M14 2l6 6v5"/>
+            <circle cx="17.5" cy="17.5" r="3.5"/>
+            <path d="M7 8h3"/>
+            <path d="M7 12h4"/>
+            <path d="M7 16h2"/>
+          </svg>
+          <span class="nav-label" id="nav-will-text">Will & Succession</span>
+        </button>
+
+        <button onclick="selectTab('vault')" id="side-nav-vault" class="side-nav-item w-full flex items-center gap-3.5 px-4 py-2.5 font-medium text-sm transition cursor-pointer relative" aria-label="Encrypted Vault">
+          <span class="active-indicator" aria-hidden="true"></span>
+          <svg class="w-5 h-5 text-[#c29c4e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="5" y="11" width="14" height="10" rx="2"/>
+            <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+            <circle cx="12" cy="15.5" r="1" fill="currentColor"/>
+            <path d="M12 16.5v2"/>
+          </svg>
+          <span class="nav-label" id="nav-vault-text">Document Vault</span>
+        </button>
+
+        <button onclick="selectTab('simulator')" id="side-nav-simulator" class="side-nav-item w-full flex items-center gap-3.5 px-4 py-2.5 font-medium text-sm transition cursor-pointer relative" aria-label="What-If Simulator">
+          <span class="active-indicator" aria-hidden="true"></span>
+          <svg class="w-5 h-5 text-[#c29c4e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8"/>
+            <path d="M14 2l6 6v4"/>
+            <path d="M7 14l3-3 3 2 4-4"/>
+            <circle cx="18" cy="19" r="3"/>
+          </svg>
+          <span class="nav-label" id="nav-simulator-text">'What-If' Simulator</span>
+        </button>
+
+        <button onclick="selectTab('advisor')" id="side-nav-advisor" class="side-nav-item w-full flex items-center gap-3.5 px-4 py-2.5 font-medium text-sm transition cursor-pointer relative" aria-label="CA & Legal Audit">
+          <span class="active-indicator" aria-hidden="true"></span>
+          <svg class="w-5 h-5 text-[#c29c4e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <path d="M14 2v6h6"/>
+            <path d="M9 13l2 2 4-4"/>
+            <circle cx="12" cy="17" r="1.5"/>
+          </svg>
+          <span class="nav-label" id="nav-advisor-text">CA & Legal Audit</span>
+        </button>
+
+        <button onclick="selectTab('tracker')" id="side-nav-tracker" class="side-nav-item w-full flex items-center gap-3.5 px-4 py-2.5 font-medium text-sm transition cursor-pointer relative" aria-label="Nomination vs Will Tracker">
+          <span class="active-indicator" aria-hidden="true"></span>
+          <svg class="w-5 h-5 text-[#c29c4e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 3h5v5"/>
+            <path d="M4 20L21 3"/>
+            <path d="M21 16v5h-5"/>
+            <path d="M15 15l6 6"/>
+            <path d="M4 4l5 5"/>
+          </svg>
+          <span class="nav-label" id="nav-tracker-text">Nominee Gap Tracker</span>
+        </button>
+
+        <button onclick="selectTab('legacy-advisor')" id="side-nav-legacy-advisor" class="side-nav-item w-full flex items-center gap-3.5 px-4 py-2.5 font-medium text-sm transition cursor-pointer relative" aria-label="AI Legacy Advisor">
+          <span class="active-indicator" aria-hidden="true"></span>
+          <svg class="w-5 h-5 text-[#c29c4e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/>
+            <path d="M6 10v1a6 6 0 0 0 12 0v-1"/>
+            <path d="M12 17v4"/>
+            <path d="M8 21h8"/>
+          </svg>
+          <span class="nav-label" id="nav-legacy-advisor-text">AI Legacy Advisor</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Bottom Artwork (Palace, Tree, Falling Leaves, & Quote) -->
+    <div class="mt-auto pointer-events-none select-none relative w-full overflow-hidden">
+      <img src="/static/sidebar_palace_tree_fade.png" alt="Generations Change, Values Endure" class="w-full h-auto object-cover object-bottom" />
+    </div>
+  </aside>
+
+  <!-- ======================================================================== -->
+  <!-- 2. MAIN APP CONTENT AREA (To the right of the sidebar) -->
+  <!-- ======================================================================== -->
+  <div class="flex-1 flex flex-col min-w-0 bg-[#fbf9f5] h-screen overflow-y-auto">
+    
+    <!-- 2.1 PANORAMIC WALKING BANNER (4 GENERATIONS WALKING ON PROMENADE) -->
+    <div class="walking-banner-container relative w-full h-[120px] sm:h-[135px] overflow-hidden border-b border-[#e6dcce] shadow-xs select-none shrink-0" aria-label="Generations Promenade Walk Animation" role="region">
+      <!-- Background Panoramic Image -->
+      <div class="absolute inset-0 bg-cover bg-bottom banner-scenic-bg" style="background-image: url('/static/heritage_promenade_banner.jpg');" aria-hidden="true"></div>
+      
+      <!-- Subtle Golden Morning Gradient Overlay -->
+      <div class="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-amber-600/15 pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-stone-900/10 to-transparent pointer-events-none" aria-hidden="true"></div>
+
+      <!-- Floating Autumn Leaves Effect -->
+      <div class="leaves-container pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <span class="floating-leaf leaf-1">🍂</span>
+        <span class="floating-leaf leaf-2">🍁</span>
+        <span class="floating-leaf leaf-3">🍂</span>
+        <span class="floating-leaf leaf-4">🌸</span>
+      </div>
+
+      <!-- Slogan on Right Side -->
+      <div class="absolute top-3 right-6 hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-amber-200/80 shadow-xs pointer-events-none z-10">
+        <span class="serif-title italic text-xs font-semibold text-[#6d4c1b] tracking-wide">"Generations walk together for a brighter tomorrow."</span>
+        <span class="text-amber-600 text-xs">🍂</span>
+      </div>
+
+      <!-- Interactive Controls Top Left (Play/Pause & Stroll Speed) -->
+      <div class="absolute top-2.5 left-4 z-20 flex items-center gap-1.5 opacity-85 hover:opacity-100 transition">
+        <button id="walk-toggle-btn" onclick="toggleWalking()" class="px-2 py-1 rounded-lg bg-white/90 hover:bg-white text-[11px] font-bold text-stone-700 backdrop-blur-sm border border-stone-200 shadow-xs flex items-center gap-1 cursor-pointer" aria-label="Pause or resume family walk animation">
+          <span id="walk-toggle-icon" aria-hidden="true">⏸️</span> <span id="walk-toggle-text">Walking</span>
+        </button>
+        <button id="walk-speed-btn" onclick="speedUpWalking()" class="px-2 py-1 rounded-lg bg-white/90 hover:bg-white text-[11px] font-bold text-stone-700 backdrop-blur-sm border border-stone-200 shadow-xs cursor-pointer" aria-label="Cycle walking pace" title="Adjust walking speed">
+          🚶 Normal Walk
+        </button>
+      </div>
+
+      <!-- THE 4 CHARACTERS WALKING ON THE PROMENADE -->
+      <div id="promenade-walkers-stage" class="absolute inset-x-0 bottom-0 h-full pointer-events-none z-10 overflow-hidden">
+        
+        <!-- Walking Group Container (Controlled by smooth JS Animation Frame loop) -->
+        <div id="walking-family-group" class="absolute bottom-1.5 flex items-end gap-3 sm:gap-4 pointer-events-auto cursor-pointer" style="left: 10%;" onclick="triggerCharReaction('group')" role="group" aria-label="Interactive family group: Click to hear generational dialogue">
+          
+          <!-- Speech Reaction Bubble (pops up on click or hover) -->
+          <div id="family-speech-bubble" class="hidden absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-2xl bg-white/95 backdrop-blur-md border border-amber-300 text-xs font-bold text-stone-800 shadow-lg whitespace-nowrap z-30 pointer-events-none animate-in fade-in zoom-in-95" role="status" aria-live="polite">
+            <span id="speech-bubble-text">"Parivaar ki virasat hi sabse badi daulat hai!" 🌿</span>
+            <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white rotate-45 border-r border-b border-amber-300" aria-hidden="true"></div>
+          </div>
+
+          <!-- Character 1: DADA-JI (Grandfather) -->
+          <div class="walker-unit flex flex-col items-center justify-end relative group" onclick="event.stopPropagation(); triggerCharReaction('dada')" role="button" tabindex="0" aria-label="Grandfather Dada-ji, tap to listen" onkeydown="if(event.key==='Enter'||event.key===' '){event.stopPropagation();triggerCharReaction('dada')}">
+            <div id="shadow-dada" class="walker-shadow shadow-dada w-12 h-2 rounded-full bg-stone-900/25 blur-[1px] absolute -bottom-0.5" aria-hidden="true"></div>
+            <img id="char-dada-img" src="/static/dada_walk_1.png" alt="Grandfather Dada-ji walking with cane" class="char-sprite char-dada-anim h-[76px] sm:h-[84px] w-auto object-contain select-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.2)]" />
+            <div class="char-hover-pill opacity-0 group-hover:opacity-100 transition absolute -top-5 text-[9px] font-bold px-1.5 py-0.5 rounded bg-stone-800 text-white whitespace-nowrap" aria-hidden="true">Dada-ji (Karta)</div>
+          </div>
+
+          <!-- Character 2: FATHER (Adult Son / Businessman) -->
+          <div class="walker-unit flex flex-col items-center justify-end relative group" onclick="event.stopPropagation(); triggerCharReaction('father')" role="button" tabindex="0" aria-label="Father Omprakash, tap to listen" onkeydown="if(event.key==='Enter'||event.key===' '){event.stopPropagation();triggerCharReaction('father')}">
+            <div id="shadow-father" class="walker-shadow shadow-father w-12 h-2 rounded-full bg-stone-900/25 blur-[1px] absolute -bottom-0.5" aria-hidden="true"></div>
+            <img id="char-father-img" src="/static/father_walk_1.png" alt="Father Omprakash walking with briefcase" class="char-sprite char-father-anim h-[80px] sm:h-[88px] w-auto object-contain select-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.2)]" />
+            <div class="char-hover-pill opacity-0 group-hover:opacity-100 transition absolute -top-5 text-[9px] font-bold px-1.5 py-0.5 rounded bg-stone-800 text-white whitespace-nowrap" aria-hidden="true">Omprakash (Father)</div>
+          </div>
+
+          <!-- Character 3: SCHOOL BOY (Teen Son) -->
+          <div class="walker-unit flex flex-col items-center justify-end relative group" onclick="event.stopPropagation(); triggerCharReaction('boy')" role="button" tabindex="0" aria-label="Rahul Teen Son, tap to listen" onkeydown="if(event.key==='Enter'||event.key===' '){event.stopPropagation();triggerCharReaction('boy')}">
+            <div id="shadow-boy" class="walker-shadow shadow-boy w-10 h-1.5 rounded-full bg-stone-900/25 blur-[1px] absolute -bottom-0.5" aria-hidden="true"></div>
+            <img id="char-boy-img" src="/static/boy_walk_1.png" alt="Rahul School Boy walking with backpack" class="char-sprite char-boy-anim h-[68px] sm:h-[76px] w-auto object-contain select-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.2)]" />
+            <div class="char-hover-pill opacity-0 group-hover:opacity-100 transition absolute -top-5 text-[9px] font-bold px-1.5 py-0.5 rounded bg-stone-800 text-white whitespace-nowrap" aria-hidden="true">Rahul (Son)</div>
+          </div>
+
+          <!-- Character 4: LITTLE KID (Toddler) -->
+          <div class="walker-unit flex flex-col items-center justify-end relative group" onclick="event.stopPropagation(); triggerCharReaction('kid')" role="button" tabindex="0" aria-label="Amit Youngest Child, tap to listen" onkeydown="if(event.key==='Enter'||event.key===' '){event.stopPropagation();triggerCharReaction('kid')}">
+            <div id="shadow-kid" class="walker-shadow shadow-kid w-8 h-1.5 rounded-full bg-stone-900/25 blur-[1px] absolute -bottom-0.5" aria-hidden="true"></div>
+            <img id="char-kid-img" src="/static/kid_walk_1.png" alt="Amit Little Child walking happily" class="char-sprite char-kid-anim h-[54px] sm:h-[60px] w-auto object-contain select-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.2)]" />
+            <div class="char-hover-pill opacity-0 group-hover:opacity-100 transition absolute -top-5 text-[9px] font-bold px-1.5 py-0.5 rounded bg-stone-800 text-white whitespace-nowrap" aria-hidden="true">Amit (Next-Gen)</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.2 TOP SUB-HEADER BAR -->
+    <header class="bg-white border-b border-stone-200 px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3 sticky top-0 z-20 shadow-xs shrink-0">
+      
+      <!-- Mobile Drawer Hamburger Toggle -->
+      <button id="mobile-menu-btn" onclick="toggleMobileSidebar()" class="lg:hidden p-2 -ml-1 text-stone-700 hover:text-stone-900 rounded-lg hover:bg-stone-100 transition cursor-pointer" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-sidebar">
+        <span class="text-xl leading-none" aria-hidden="true">☰</span>
+      </button>
+
+      <!-- Left: Estate Plan Switcher & Search Bar -->
+      <div class="flex items-center gap-3 flex-1 min-w-0">
+        <div class="flex items-center gap-2 shrink-0">
+          <label for="scenario-select" class="text-xs font-bold text-stone-500 whitespace-nowrap hidden sm:inline">Estate Plan:</label>
+          <select id="scenario-select" aria-label="Select active estate plan" class="text-xs bg-stone-100 hover:bg-stone-200/80 border border-stone-300 rounded-lg px-2.5 py-1.5 font-bold text-stone-800 focus:outline-none focus:ring-2 focus:ring-teal-500 transition max-w-[150px] sm:max-w-[220px] truncate cursor-pointer">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="relative flex-1 max-w-md hidden md:block">
+          <label for="global-search-input" class="sr-only">Search documents, assets, and family members</label>
+          <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400 text-xs" aria-hidden="true">🔍</span>
+          <input id="global-search-input" type="search" placeholder="Search documents, assets, family members..." class="w-full pl-8 pr-3 py-1.5 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100/60 focus:bg-white text-xs font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 transition">
+        </div>
+      </div>
+
+      <!-- Right: Notifications, Language, Profile Pill -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <!-- Notification Bell -->
+        <button class="relative p-1.5 text-stone-600 hover:text-stone-900 rounded-lg hover:bg-stone-100 transition cursor-pointer" aria-label="3 Active Statutory Deadlines & Document Renewals" title="3 Active Statutory Deadlines">
+          <span class="text-base" aria-hidden="true">🔔</span>
+          <span class="absolute top-1 right-1 w-4 h-4 rounded-full bg-rose-600 text-white text-[9px] font-extrabold flex items-center justify-center" aria-hidden="true">3</span>
+        </button>
+
+        <!-- Language Selector (English / हिन्दी / Hinglish) -->
+        <div id="lang-selector-group" class="inline-flex items-center rounded-xl border border-stone-200 bg-stone-100 p-0.5 text-xs font-semibold shadow-2xs" role="group" aria-label="Language selection">
+          <button id="lang-btn-en" onclick="setLanguage('en')" class="px-2.5 py-1 rounded-lg transition font-bold bg-white text-stone-900 shadow-2xs cursor-pointer" aria-label="English">English</button>
+          <button id="lang-btn-hi" onclick="setLanguage('hi')" class="px-2.5 py-1 rounded-lg transition font-semibold text-stone-600 hover:text-stone-900 cursor-pointer" aria-label="Hindi">हिन्दी</button>
+          <button id="lang-btn-hinglish" onclick="setLanguage('hinglish')" class="px-2.5 py-1 rounded-lg transition font-semibold text-stone-600 hover:text-stone-900 cursor-pointer" aria-label="Hinglish">Hinglish</button>
+        </div>
+        <button id="lang-toggle-btn" onclick="toggleLanguage()" class="hidden" aria-hidden="true"></button>
+
+        <!-- User Session Pill -->
+        <div id="auth-session-pill" role="button" tabindex="0" class="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-amber-100/70 border border-amber-200/80 text-xs transition cursor-pointer hover:bg-amber-100" onclick="openAuthModal()" onkeydown="if(event.key==='Enter'||event.key===' ')openAuthModal()" aria-label="User session details: karta_sharma, role Patriarch" title="View logged-in user or switch account">
+          <div class="w-6 h-6 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-xs" aria-hidden="true">
+            K
+          </div>
+          <span id="header-username-display" class="font-bold text-stone-800 hidden sm:inline">karta_sharma</span>
+          <span id="header-role-badge" class="px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase bg-teal-800 text-white">PATRIARCH</span>
+        </div>
+
+        <!-- Logout Button -->
+        <button id="header-logout-btn" onclick="logoutUser()" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold shadow-2xs transition cursor-pointer" aria-label="Sign out of estate plan" title="Sign out of estate plan">
+          <span>🚪</span> <span class="hidden sm:inline">Sign Out</span>
+        </button>
+
+        <!-- Download Will PDF -->
+        <button onclick="downloadWillPDF()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-teal-800 hover:bg-teal-900 text-white text-xs font-bold shadow-xs transition cursor-pointer" aria-label="Download Formal Legal Will PDF">
+          <span>📥 Will PDF</span>
+        </button>
+      </div>
+
+    </header>
+
+    <!-- Role Restriction Alert Banner -->
+    <div id="role-banner" class="hidden"></div>
+
+    <!-- 2.3 MAIN BODY VIEW CONTAINER -->
+    <main id="main-content" tabindex="-1" class="flex-1 p-4 sm:p-6 space-y-6 focus:outline-none">
+
+      <!-- ========================================== -->
+      <!-- TAB 1: DASHBOARD -->
+      <!-- ========================================== -->
+      <section id="pane-dashboard" class="tab-pane space-y-5">
+        
+        <!-- HERO CARD -->
+        <div class="heritage-card p-6 bg-white border border-[#ede6da] rounded-2xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 shadow-xs relative overflow-hidden">
+          <!-- Subtle Red Fort / Heritage watermarking on the right background -->
+          <div class="absolute right-0 top-0 bottom-0 w-80 opacity-15 pointer-events-none bg-contain bg-right bg-no-repeat" style="background-image: url('/static/gold_monument_footer.png');"></div>
+
+          <div class="z-10 flex-1">
+            <div class="text-xs font-semibold text-stone-500 mb-1">Namaste,</div>
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <h2 id="dash-karta-name" class="text-2xl font-black text-stone-900 serif-title tracking-tight">Omprakash Sharma</h2>
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#fef3c7] text-[#92400e] border border-[#fde68a]">
+                👑 <span id="dash-karta-title">Karta / Business Owner</span>
+              </span>
+            </div>
+            <p id="dash-biz-name" class="text-xs text-stone-600 mt-1 font-medium">M/s Sharma Kirana & General Store (Sole Proprietorship) • Old Delhi, Delhi</p>
+            <div class="mt-2 text-xs text-stone-500 flex items-center gap-1.5">
+              <span class="font-semibold text-stone-700">Governing Succession Law:</span>
+              <span id="dash-gov-law" class="text-teal-800 font-bold">Hindu Succession Act, 1956 (amended 2005)</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2 flex-wrap mt-4">
+              <button onclick="openNewProfileModal()" class="px-3.5 py-2 rounded-xl bg-[#092b23] hover:bg-[#0d3b30] text-amber-100 text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer border border-[#1a5345]">
+                <span>+</span><span id="btn-create-plan-text">Create My Plan</span>
+              </button>
+              <button onclick="openEditProfileModal()" class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer">
+                <span>✏️</span><span id="btn-edit-details-text">Edit Details</span>
+              </button>
+              <button onclick="openSROGuideModal()" class="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+                <span>🏛️</span><span id="btn-sro-guide-text">SRO Checklist</span>
+              </button>
+              <button onclick="selectTab('simulator')" class="px-3.5 py-2 rounded-xl bg-[#d97706] hover:bg-[#b45309] text-white text-xs font-bold shadow-sm transition flex items-center gap-1.5 cursor-pointer">
+                <span>⚡</span><span id="btn-simulate-text">Simulate Demise</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Quote Card -->
+          <div class="z-10 lg:max-w-xs p-4 rounded-xl bg-[#fdfbf7] border border-[#ebdcc7] text-stone-800 shadow-xs relative">
+            <span class="text-2xl text-amber-600/40 font-serif absolute top-1 left-2">“</span>
+            <p class="text-xs italic font-medium leading-relaxed pl-3 text-stone-700">
+              A well-planned tomorrow, keeps your legacy alive today.
+            </p>
+            <span class="text-2xl text-amber-600/40 font-serif float-right -mt-2">”</span>
+          </div>
+        </div>
+
+        <!-- 4-STEP ONBOARDING WIZARD GUIDE -->
+        <div class="p-4 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50/70 border border-amber-200/90 rounded-2xl shadow-xs">
+          <div class="flex items-center justify-between pb-2 mb-3 border-b border-amber-200/70">
+            <div class="flex items-center gap-2">
+              <span class="text-base">🧭</span>
+              <h3 class="text-xs font-black text-amber-950 uppercase tracking-wide" id="wizard-title-text">Simple 4 Steps — Secure Your Family Estate & Succession Plan</h3>
+            </div>
+            <span class="text-[11px] font-semibold text-amber-800" id="wizard-hint-text">Click any step to begin &rarr;</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div onclick="selectTab('family')" class="p-3 bg-white/95 hover:bg-white rounded-xl border border-amber-200/90 cursor-pointer transition hover:shadow-xs group">
+              <div class="flex items-center gap-2 text-xs font-bold text-stone-800 group-hover:text-teal-800">
+                <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-black">1</span>
+                <span id="wiz-step-1-title">Map Family Lineage</span>
+              </div>
+              <p class="text-[11px] text-stone-600 mt-1.5 leading-snug" id="wiz-step-1-desc">Record parents, spouse, children, daughters, and coparceners in the family tree.</p>
+            </div>
+            <div onclick="selectTab('assets')" class="p-3 bg-white/95 hover:bg-white rounded-xl border border-amber-200/90 cursor-pointer transition hover:shadow-xs group">
+              <div class="flex items-center gap-2 text-xs font-bold text-stone-800 group-hover:text-teal-800">
+                <span class="w-6 h-6 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center text-xs font-black">2</span>
+                <span id="wiz-step-2-title">Record Assets & Business</span>
+              </div>
+              <p class="text-[11px] text-stone-600 mt-1.5 leading-snug" id="wiz-step-2-desc">List shops, commercial property, gold, bank accounts, FDs, and existing nominees.</p>
+            </div>
+            <div onclick="selectTab('will')" class="p-3 bg-white/95 hover:bg-white rounded-xl border border-amber-200/90 cursor-pointer transition hover:shadow-xs group">
+              <div class="flex items-center gap-2 text-xs font-bold text-stone-800 group-hover:text-teal-800">
+                <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center text-xs font-black">3</span>
+                <span id="wiz-step-3-title">Draft Succession Will</span>
+              </div>
+              <p class="text-[11px] text-stone-600 mt-1.5 leading-snug" id="wiz-step-3-desc">Designate which heir receives which asset; appoint trusted executor and witnesses.</p>
+            </div>
+            <div onclick="selectTab('vault')" class="p-3 bg-white/95 hover:bg-white rounded-xl border border-amber-200/90 cursor-pointer transition hover:shadow-xs group">
+              <div class="flex items-center gap-2 text-xs font-bold text-stone-800 group-hover:text-teal-800">
+                <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs font-black">4</span>
+                <span id="wiz-step-4-title">Encrypted Vault Storage</span>
+              </div>
+              <p class="text-[11px] text-stone-600 mt-1.5 leading-snug" id="wiz-step-4-desc">Safeguard registry title deeds, share certificates, and partnership pacts in AES-256 vault.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIMPLE LEGAL ESSENTIALS FOR SHOPKEEPERS & FAMILIES -->
+        <div class="p-4 bg-white border border-[#ebdcc7] rounded-2xl shadow-xs">
+          <div class="flex items-center gap-2 mb-2.5 pb-2 border-b border-stone-100">
+            <span class="text-base">💡</span>
+            <h4 class="text-xs font-bold text-stone-900" id="legal-rules-title-text">4 Essential Legal Rules for Family Businesses & Joint Families:</h4>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-[11px] text-stone-700">
+            <div class="p-3 rounded-xl bg-stone-50 border border-stone-200/80">
+              <strong class="text-teal-900 block font-bold mb-1" id="legal-card-1-title">🏦 Bank Nominee ≠ Legal Owner</strong>
+              <p class="text-stone-600 leading-relaxed" id="legal-card-1-desc">Under Supreme Court precedent (Sarbati Devi), a nominee is only a temporary trustee. Final legal ownership passes strictly via the Will or succession law.</p>
+            </div>
+            <div class="p-3 rounded-xl bg-stone-50 border border-stone-200/80">
+              <strong class="text-amber-900 block font-bold mb-1" id="legal-card-2-title">⚖️ Equal Coparcenary for Daughters</strong>
+              <p class="text-stone-600 leading-relaxed" id="legal-card-2-desc">Under the 2005 HSA amendment & Vineeta Sharma ruling, daughters possess birthright coparcenary rights equal to sons in ancestral property, even after marriage.</p>
+            </div>
+            <div class="p-3 rounded-xl bg-stone-50 border border-stone-200/80">
+              <strong class="text-blue-900 block font-bold mb-1" id="legal-card-3-title">🏢 Partnership Firm Protection</strong>
+              <p class="text-stone-600 leading-relaxed" id="legal-card-3-desc">Under Section 42(c) of the Indian Partnership Act, a firm automatically dissolves upon a partner's demise unless the deed includes an explicit succession clause.</p>
+            </div>
+            <div class="p-3 rounded-xl bg-stone-50 border border-stone-200/80">
+              <strong class="text-emerald-900 block font-bold mb-1" id="legal-card-4-title">🏛️ Sub-Registrar (SRO) Registration</strong>
+              <p class="text-stone-600 leading-relaxed" id="legal-card-4-desc">While an un-registered will is legally valid with 2 witnesses, registering at the Sub-Registrar office prevents fraudulent dispute challenges.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIVE STATUTORY DEADLINES (3 CARDS) -->
+        <div class="heritage-card p-5 bg-white border border-[#ede6da] rounded-2xl shadow-xs">
+          <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+            <div class="flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-700 text-sm">
+                📅
+              </div>
+              <div>
+                <h3 class="font-bold text-stone-900 text-sm">Active Statutory Deadlines & Document Renewals (3)</h3>
+                <p class="text-[11px] text-stone-500">Stay compliant to avoid legal or operational issues. Manage all reminders in one place.</p>
+              </div>
+            </div>
+            <button onclick="selectTab('vault')" class="text-xs text-rose-700 hover:text-rose-900 font-bold flex items-center gap-1 cursor-pointer">
+              <span>View All Reminders &rarr;</span>
+            </button>
+          </div>
+
+          <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3.5">
+            <!-- Reminder Card 1: SRO Will Registration Target -->
+            <div class="p-4 rounded-xl border border-rose-200/80 bg-rose-50/40 flex flex-col justify-between transition hover:shadow-xs">
+              <div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="text-base text-rose-600">📜</span>
+                    <span class="font-bold text-xs text-stone-900">SRO Will Registration Target</span>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800">Due in 30d</span>
+                </div>
+                <div class="mt-2 text-[11px] text-stone-600">
+                  <strong>Target Date:</strong> 2026-12-15
+                </div>
+                <p class="mt-1 text-[11px] text-stone-500 leading-normal">
+                  The will draft is ready for registration. Book an appointment with the Sub-Registrar to complete the process.
+                </p>
+              </div>
+              <div class="mt-3 text-right">
+                <button onclick="openSROGuideModal()" class="w-6 h-6 rounded-full bg-rose-100 hover:bg-rose-200 text-rose-700 inline-flex items-center justify-center text-xs font-bold cursor-pointer">&rarr;</button>
+              </div>
+            </div>
+
+            <!-- Reminder Card 2: MCD Commercial Shop Renewal -->
+            <div class="p-4 rounded-xl border border-blue-200/80 bg-blue-50/40 flex flex-col justify-between transition hover:shadow-xs">
+              <div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="text-base text-blue-600">📄</span>
+                    <span class="font-bold text-xs text-stone-900">MCD Commercial Shop Renewal</span>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800">Due in 30d</span>
+                </div>
+                <div class="mt-2 text-[11px] text-stone-600">
+                  <strong>File:</strong> Sale_Deed_Shop14_KhariBaoli.pdf
+                </div>
+                <div class="text-[11px] text-stone-500">
+                  Category: Property • Renewal Date: 2026-11-19
+                </div>
+              </div>
+              <div class="mt-3 text-right">
+                <button onclick="selectTab('vault')" class="w-6 h-6 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 inline-flex items-center justify-center text-xs font-bold cursor-pointer">&rarr;</button>
+              </div>
+            </div>
+
+            <!-- Reminder Card 3: SBI Term Deposit Maturity -->
+            <div class="p-4 rounded-xl border border-teal-200/80 bg-teal-50/40 flex flex-col justify-between transition hover:shadow-xs">
+              <div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="text-base text-teal-600">🏛️</span>
+                    <span class="font-bold text-xs text-stone-900">SBI Term Deposit Maturity</span>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-teal-100 text-teal-800">Due in 30d</span>
+                </div>
+                <div class="mt-2 text-[11px] text-stone-600">
+                  <strong>File:</strong> SBI_Term_Deposit_Receipt_35L.pdf
+                </div>
+                <div class="text-[11px] text-stone-500">
+                  Category: Financial • Renewal Date: 2026-11-12
+                </div>
+              </div>
+              <div class="mt-3 text-right">
+                <button onclick="selectTab('vault')" class="w-6 h-6 rounded-full bg-teal-100 hover:bg-teal-200 text-teal-700 inline-flex items-center justify-center text-xs font-bold cursor-pointer">&rarr;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KEY METRIC CARDS (4 CARDS) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Card 1: Total Net Worth -->
+          <div class="heritage-card p-5 bg-white border border-[#ede6da] rounded-2xl shadow-xs">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-teal-50 text-teal-700 flex items-center justify-center text-xs">📊</span>
+              <span class="text-xs font-semibold text-stone-500" id="lbl-net-worth">Total Net Worth</span>
+            </div>
+            <div class="flex items-baseline gap-2 mt-2">
+              <div id="dash-net-worth" class="text-2xl font-black text-stone-900 serif-title">₹ 3.83 Cr</div>
+              <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">↑ 8.2%</span>
+            </div>
+            <p class="text-[11px] text-stone-500 mt-1">Real estate, gold, shop & liquid assets</p>
+          </div>
+
+          <!-- Card 2: Gross Assets -->
+          <div class="heritage-card p-5 bg-white border border-[#ede6da] rounded-2xl shadow-xs">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-emerald-50 text-emerald-700 flex items-center justify-center text-xs">🏠</span>
+              <span class="text-xs font-semibold text-stone-500" id="lbl-gross-assets">Gross Assets</span>
+            </div>
+            <div id="dash-gross-assets" class="text-2xl font-black text-stone-900 serif-title mt-2">₹ 4.01 Cr</div>
+            <p class="text-[11px] text-stone-500 mt-1">Inventories, property, financial assets</p>
+          </div>
+
+          <!-- Card 3: Outstanding Liabilities -->
+          <div class="heritage-card p-5 bg-white border border-[#ede6da] rounded-2xl shadow-xs">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-rose-50 text-rose-700 flex items-center justify-center text-xs">🧾</span>
+              <span class="text-xs font-semibold text-stone-500" id="lbl-liabilities">Outstanding Liabilities</span>
+            </div>
+            <div id="dash-liabilities" class="text-2xl font-black text-rose-600 serif-title mt-2">₹ 18.00 Lakh</div>
+            <p class="text-[11px] text-stone-500 mt-1">Trade debt & bank OD limit</p>
+          </div>
+
+          <!-- Card 4: Family Dispute Risk -->
+          <div class="heritage-card p-5 bg-white border border-[#ede6da] rounded-2xl shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-md bg-amber-50 text-amber-700 flex items-center justify-center text-xs">🛡️</span>
+                  <span class="text-xs font-semibold text-stone-500" id="lbl-dispute-risk">Family Dispute Risk</span>
+                </div>
+                <span id="dash-risk-level" class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-amber-100 text-amber-800">Moderate Risk</span>
+              </div>
+              <div id="dash-risk-score" class="text-2xl font-black text-stone-900 serif-title mt-2">55/100</div>
+            </div>
+            <div class="w-full bg-stone-100 rounded-full h-2 mt-2 overflow-hidden">
+              <div id="dash-risk-bar" class="bg-amber-500 h-2 rounded-full" style="width: 55%"></div>
+            </div>
+            <p class="text-[10px] text-stone-500 mt-1.5">Based on asset distribution, heir clarity and document readiness.</p>
+          </div>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- BOTTOM PANELS: SECTION 1 - FAMILY LINEAGE (8 COLS) + READINESS (4 COLS) -->
+        <!-- ================================================================= -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+          
+          <!-- 1. Family Lineage Tree Preview (lg:col-span-8) - Spans 2/3 width with breathing room -->
+          <div class="lg:col-span-8 heritage-card p-5 bg-white border border-[#ede6da] rounded-2xl shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center text-base">🌳</span>
+                  <div>
+                    <h3 class="font-bold text-stone-900 text-sm">Family Succession Tree <span class="text-stone-400 font-normal">(Lineage Preview)</span></h3>
+                    <p class="text-[11px] text-stone-500">Generational hierarchy with Class-I statutory heirship and birthright coparceners</p>
+                  </div>
+                </div>
+                <button onclick="selectTab('family')" class="text-xs text-teal-700 hover:text-teal-900 font-bold flex items-center gap-1 cursor-pointer">
+                  <span>View Full Family Tree &rarr;</span>
+                </button>
+              </div>
+
+              <!-- Interactive Family Tree Lineage Container -->
+              <div id="dash-family-tree-container" class="py-4 flex-1 flex flex-col justify-center overflow-x-auto min-h-[280px]">
+                <!-- Rendered dynamically by family_tree.js with avatar cards -->
+              </div>
+            </div>
+
+            <!-- Bottom Lineage Legend & Quick Add -->
+            <div class="pt-3 border-t border-stone-100 flex items-center justify-between flex-wrap gap-2 text-xs">
+              <div class="flex items-center gap-3 text-[11px] text-stone-600">
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>Class I Heir</span>
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>Coparcener</span>
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>Karta / Spouse</span>
+              </div>
+              <button onclick="openAddMemberModal()" class="px-3 py-1.5 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold border border-teal-200 text-xs transition cursor-pointer">
+                + Add Member
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Succession Readiness & Action Checklist (lg:col-span-4) - Balanced 1/3 card -->
+          <div class="lg:col-span-4 heritage-card p-5 bg-white border border-[#ede6da] rounded-2xl shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+                <div class="flex items-center gap-2">
+                  <span class="w-7 h-7 rounded-lg bg-teal-50 text-teal-800 border border-teal-200 flex items-center justify-center text-sm">🎯</span>
+                  <div>
+                    <h3 class="font-bold text-stone-900 text-sm">Succession Readiness</h3>
+                    <p class="text-[11px] text-stone-500">Legal statutory health & clarity</p>
+                  </div>
+                </div>
+                <span id="dash-readiness-badge" class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-teal-100 text-teal-900 border border-teal-200">
+                  Loading...
+                </span>
+              </div>
+
+              <!-- Progress Dial Bar -->
+              <div class="py-3">
+                <div class="flex items-center justify-between text-xs font-semibold text-stone-700 mb-1.5">
+                  <span id="dash-readiness-subtitle" class="flex items-center gap-1.5 text-stone-600">
+                    <span class="w-2 h-2 rounded-full bg-teal-600 animate-pulse"></span>
+                    <span>Institutional Readiness</span>
+                  </span>
+                  <span id="dash-readiness-percent" class="text-teal-800 font-extrabold text-sm">0%</span>
+                </div>
+                <div class="w-full bg-stone-100 rounded-full h-2.5 overflow-hidden">
+                  <div id="dash-readiness-bar" class="bg-gradient-to-r from-teal-600 to-emerald-500 h-2.5 rounded-full transition-all duration-700" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <!-- Dynamic 4 Pillars & Checklist Items -->
+              <div id="dash-readiness-checklist" class="space-y-1.5 text-xs pt-1">
+                <!-- Populated dynamically by renderDashboard() in app.js -->
+              </div>
+            </div>
+
+            <!-- Action Buttons at Bottom -->
+            <div class="pt-3 border-t border-stone-100 mt-2 flex items-center gap-2">
+              <button onclick="selectTab('tracker')" class="flex-1 py-2 px-2.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs transition shadow-xs flex items-center justify-center gap-1 cursor-pointer">
+                <span>View Gap Tracker</span>
+                <span>&rarr;</span>
+              </button>
+              <button onclick="selectTab('legacy-advisor')" class="py-2 px-3 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs transition border border-amber-300 flex items-center justify-center gap-1 cursor-pointer" title="Ask AI Advisor">
+                <span>🤖 AI Advisor</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- BOTTOM PANELS: SECTION 2 - ASSET PORTFOLIO (7 COLS) + LEGAL AUDIT NOTES (5 COLS) -->
+        <!-- ================================================================= -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+          
+          <!-- 3. Asset Distribution Donut Chart & Category Breakdown (lg:col-span-7) -->
+          <div class="lg:col-span-7 heritage-card p-5 bg-white border border-[#ede6da] rounded-2xl shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 flex items-center justify-center text-base">💰</span>
+                  <div>
+                    <h3 class="font-bold text-stone-900 text-sm">Asset Distribution Portfolio</h3>
+                    <p class="text-[11px] text-stone-500">Asset classes, total valuation & allocation balance</p>
+                  </div>
+                </div>
+                <button onclick="selectTab('assets')" class="text-xs text-teal-700 hover:text-teal-900 font-bold flex items-center gap-1 cursor-pointer">
+                  <span>Manage Assets &rarr;</span>
+                </button>
+              </div>
+
+              <!-- Side-by-side Chart & Metrics (Well-proportioned layout!) -->
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center py-4">
+                <!-- Left: Donut Chart with Centered Total -->
+                <div class="sm:col-span-5 flex flex-col items-center justify-center relative">
+                  <div class="w-44 h-44 sm:w-48 sm:h-48 relative">
+                    <canvas id="asset-distribution-chart"></canvas>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                      <div id="dash-chart-center-total" class="text-base font-black text-stone-900 serif-title">₹ 3.83 Cr</div>
+                      <div class="text-[10px] text-stone-500 font-semibold uppercase tracking-wider">Total Estate</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right: Rich Category Breakdown List with INR amounts -->
+                <div id="dash-asset-legend-container" class="sm:col-span-7 space-y-2 text-xs">
+                  <!-- Dynamically populated by renderAssetDistributionDonut() in app.js -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Quick Actions -->
+            <div class="pt-3 border-t border-stone-100 flex items-center justify-between flex-wrap gap-2 text-xs">
+              <span class="text-stone-500 text-[11px]">💡 Tip: Clear bank nominee vs will bequest conflicts to prevent disputes</span>
+              <button onclick="openAddAssetModal()" class="px-3 py-1.5 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold border border-teal-200 transition cursor-pointer">
+                + Add Asset / Business
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. CA & Legal Audit Advisory Notes (lg:col-span-5) -->
+          <div class="lg:col-span-5 heritage-card p-5 bg-white border border-[#ede6da] rounded-2xl shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 flex items-center justify-center text-base">⚖️</span>
+                  <div>
+                    <h3 class="font-bold text-stone-900 text-sm">CA & Legal Audit Flags</h3>
+                    <p class="text-[11px] text-stone-500">Live observations by CA Ramesh Chawla</p>
+                  </div>
+                </div>
+                <button onclick="selectTab('advisor')" class="text-xs text-teal-700 hover:text-teal-900 font-bold flex items-center gap-1 cursor-pointer">
+                  <span>Full Audit &rarr;</span>
+                </button>
+              </div>
+
+              <!-- Live Notes Container from DB -->
+              <div id="dash-notes-container" class="space-y-2.5 py-3">
+                <!-- Rendered dynamically by app.js -->
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-stone-100 flex items-center justify-between flex-wrap gap-2">
+              <span class="text-[11px] text-stone-500">Have questions about your HUF or Will?</span>
+              <button onclick="selectTab('advisor')" class="px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs border border-stone-200 transition cursor-pointer">
+                Consult CA / Lawyer
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+<!-- ========================================== -->
+    <!-- TAB 2: FAMILY TREE -->
+    <!-- ========================================== -->
+    <section id="pane-family" class="tab-pane hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-xl font-black text-slate-900 tracking-tight">Family Tree & Legal Heir Hierarchy</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Identifies Class I statutory heirs under Hindu Succession Act, 1956 (2005 amendment)</p>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="quickAddMember('Spouse', 'Female')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border text-slate-700 text-xs font-semibold transition">
+            + Add Spouse
+          </button>
+          <button onclick="quickAddMember('Son', 'Male')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border text-slate-700 text-xs font-semibold transition">
+            + Add Son
+          </button>
+          <button onclick="quickAddMember('Daughter', 'Female')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border text-slate-700 text-xs font-semibold transition">
+            + Add Daughter
+          </button>
+          <button onclick="quickAddMember('Mother', 'Female')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border text-slate-700 text-xs font-semibold transition">
+            + Add Mother
+          </button>
+          <button id="add-member-btn" onclick="openAddMemberModal()" class="px-3.5 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+            <span>+ Custom Member</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Visual Hierarchy Canvas -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs overflow-x-auto">
+        <div id="main-family-tree-container">
+          <!-- Rendered by family_tree.js -->
+        </div>
+      </div>
+
+      <!-- Family Members Table -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="p-4 border-b border-slate-100 font-bold text-slate-800 text-sm">
+          All Family Members & Succession Rights
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-4">Name</th>
+                <th class="py-3 px-4">Relationship</th>
+                <th class="py-3 px-4">Age / Status</th>
+                <th class="py-3 px-4">Statutory Class</th>
+                <th class="py-3 px-4">Coparcenary Right</th>
+                <th class="py-3 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="family-table-body">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: ASSET INVENTORY -->
+    <!-- ========================================== -->
+    <section id="pane-assets" class="tab-pane hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-xl font-black text-slate-900 tracking-tight">Family Asset & Business Inventory</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Commercial shops, ancestral home, gold, bank accounts, and partnership shares</p>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="quickAddAsset('commercial_shop')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border text-slate-700 text-xs font-semibold transition">
+            + Shop / Commercial
+          </button>
+          <button onclick="quickAddAsset('bank_fd')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border text-slate-700 text-xs font-semibold transition">
+            + Bank FD / Savings
+          </button>
+          <button onclick="quickAddAsset('gold_jewellery')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border text-slate-700 text-xs font-semibold transition">
+            + Gold / Jewellery
+          </button>
+          <button id="add-asset-btn" onclick="openAddAssetModal()" class="px-3.5 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+            <span>+ Custom Asset</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Legal Warning Banner -->
+      <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-xs flex items-center gap-3">
+        <span class="text-xl">⚠️</span>
+        <p class="leading-relaxed">
+          <strong>Crucial Indian Legal Notice:</strong> Bank & Demat nominees are <em>merely trustees</em> under Supreme Court precedent. If your bank nomination does not match your Will bequest, bank payout disputes and civil injunctions are virtually guaranteed!
+        </p>
+      </div>
+
+      <!-- Asset Grid -->
+      <div id="assets-list-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: WILL & SUCCESSION DRAFT -->
+    <!-- ========================================== -->
+    <!-- ========================================== -->
+    <!-- TAB 4: WILL & SUCCESSION DRAFT -->
+    <!-- ========================================== -->
+    <section id="pane-will" class="tab-pane hidden space-y-6">
+      
+      <!-- Top Title & Action Controls -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-2xl" aria-hidden="true">📜</span>
+            <h2 class="text-xl font-black text-slate-900 serif-title tracking-tight">Last Will & Testament Drafting Engine</h2>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">Formal legal instrument compliant with Section 63 of the Indian Succession Act, 1925 & Hindu Succession Act, 1956</p>
+        </div>
+
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <!-- View Mode Toggle: Document View vs Edit Signatories Form -->
+          <div class="inline-flex items-center rounded-xl border border-stone-200 bg-stone-100 p-0.5 text-xs font-semibold shadow-2xs" role="tablist">
+            <button id="will-tab-doc-btn" onclick="switchWillViewMode('doc')" class="px-3.5 py-1.5 rounded-lg transition font-bold bg-white text-stone-900 shadow-2xs cursor-pointer flex items-center gap-1.5">
+              <span>📜 Formal Will Document</span>
+            </button>
+            <button id="will-tab-edit-btn" onclick="switchWillViewMode('edit')" class="px-3.5 py-1.5 rounded-lg transition font-semibold text-stone-600 hover:text-stone-900 cursor-pointer flex items-center gap-1.5">
+              <span>⚙️ Signatories & SRO Details</span>
+            </button>
+          </div>
+
+          <!-- Download PDF -->
+          <button onclick="downloadWillPDF()" class="px-4 py-2 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-bold shadow-sm transition flex items-center gap-2 cursor-pointer border border-teal-900">
+            <span>📥</span> <span>Download Formal PDF</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW 1: FORMAL LEGAL WILL DOCUMENT VIEW (Active by default) -->
+      <div id="will-document-view" class="space-y-4">
+        <!-- Parchment Document Shell -->
+        <div class="bg-[#fefdf9] rounded-2xl border-2 border-[#d4af37]/60 shadow-lg p-6 sm:p-10 relative overflow-hidden">
+          
+          <!-- Subtle Top Emblem & Watermark -->
+          <div class="absolute right-4 top-4 opacity-10 pointer-events-none select-none">
+            <img src="/static/gold_tree_emblem.png" alt="Emblem" class="w-32 h-32 object-contain" />
+          </div>
+
+          <!-- Document Content Rendered by JavaScript -->
+          <div id="will-formal-doc-content" class="space-y-6 text-stone-900 leading-relaxed font-serif">
+            <!-- Populated dynamically by renderWillDocumentPreview() -->
+          </div>
+
+        </div>
+      </div>
+
+      <!-- VIEW 2: SIGNATORIES & LEGAL CONFIGURATION FORM (Toggled via button) -->
+      <div id="will-edit-view" class="hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <!-- Will Configuration Form -->
+          <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+            <form id="will-form" class="space-y-4">
+              <h3 class="font-bold text-slate-900 text-sm pb-2 border-b border-slate-100 flex items-center gap-2">
+                <span>👤</span> 1. Executor & Guardian Appointments
+              </h3>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label for="will-executor-name" class="block font-semibold text-slate-700 mb-1 is-required">Primary Executor Name *</label>
+                  <input type="text" id="will-executor-name" required placeholder="e.g. Rohit Sharma" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500">
+                </div>
+                <div>
+                  <label for="will-executor-rel" class="block font-semibold text-slate-700 mb-1">Relationship with Testator</label>
+                  <input type="text" id="will-executor-rel" placeholder="e.g. Son / Elder Brother" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500">
+                </div>
+                <div>
+                  <label for="will-alt-executor" class="block font-semibold text-slate-700 mb-1">Alternate Executor (Contingency)</label>
+                  <input type="text" id="will-alt-executor" placeholder="e.g. CA Alok Chawla" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500">
+                </div>
+                <div>
+                  <label for="will-guardian" class="block font-semibold text-slate-700 mb-1">Testamentary Guardian for Minors (Sec 60 ISA)</label>
+                  <input type="text" id="will-guardian" placeholder="e.g. Shanti Devi (Mother)" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500">
+                </div>
+              </div>
+
+              <h3 class="font-bold text-slate-900 text-sm pt-4 pb-2 border-b border-slate-100 flex items-center gap-2">
+                <span>✍️</span> 2. Independent Witnesses (Section 63 ISA)
+              </h3>
+              <p class="text-[11px] text-amber-700 bg-amber-50 p-2 rounded-lg border border-amber-200">
+                ⚠️ <b>Legal Rule:</b> Both witnesses MUST be adult independent persons who are <b>NOT beneficiaries</b> under this Will.
+              </p>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label for="will-witness1-name" class="block font-semibold text-slate-700 mb-1">Witness 1 Full Name</label>
+                  <input type="text" id="will-witness1-name" placeholder="e.g. Dr. Alok Verma" class="w-full border rounded-lg p-2.5 bg-slate-50">
+                </div>
+                <div>
+                  <label for="will-witness1-addr" class="block font-semibold text-slate-700 mb-1">Witness 1 Address & ID</label>
+                  <input type="text" id="will-witness1-addr" placeholder="e.g. 14, Barakhamba Road, New Delhi" class="w-full border rounded-lg p-2.5 bg-slate-50">
+                </div>
+                <div>
+                  <label for="will-witness2-name" class="block font-semibold text-slate-700 mb-1">Witness 2 Full Name</label>
+                  <input type="text" id="will-witness2-name" placeholder="e.g. Suresh Kumar Gupta" class="w-full border rounded-lg p-2.5 bg-slate-50">
+                </div>
+                <div>
+                  <label for="will-witness2-addr" class="block font-semibold text-slate-700 mb-1">Witness 2 Address & ID</label>
+                  <input type="text" id="will-witness2-addr" placeholder="e.g. 204, Chandni Chowk, Delhi" class="w-full border rounded-lg p-2.5 bg-slate-50">
+                </div>
+              </div>
+
+              <h3 class="font-bold text-slate-900 text-sm pt-4 pb-2 border-b border-slate-100 flex items-center gap-2">
+                <span>🩺</span> 3. Medical Fitness & Safe Storage
+              </h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label for="will-doc-name" class="block font-semibold text-slate-700 mb-1">Doctor Name (Fitness Certificate)</label>
+                  <input type="text" id="will-doc-name" placeholder="e.g. Dr. K. L. Mehta (MBBS, MD)" class="w-full border rounded-lg p-2.5 bg-slate-50">
+                </div>
+                <div>
+                  <label for="will-doc-reg" class="block font-semibold text-slate-700 mb-1">Doctor Medical Reg No (MCI / State Council)</label>
+                  <input type="text" id="will-doc-reg" placeholder="e.g. DMC-48291" class="w-full border rounded-lg p-2.5 bg-slate-50">
+                </div>
+                <div>
+                  <label for="will-vault-loc" class="block font-semibold text-slate-700 mb-1">Physical Vault / Locker Location</label>
+                  <input type="text" id="will-vault-loc" placeholder="e.g. SBI Main Branch Locker #142" class="w-full border rounded-lg p-2.5 bg-slate-50">
+                </div>
+                <div>
+                  <label for="will-sro-office" class="block font-semibold text-slate-700 mb-1">Sub-Registrar Office Jurisdiction</label>
+                  <input type="text" id="will-sro-office" placeholder="e.g. SRO Kashmere Gate, Central Delhi" class="w-full border rounded-lg p-2.5 bg-slate-50">
+                </div>
+              </div>
+
+              <div class="pt-4 flex justify-between items-center border-t border-slate-100">
+                <button type="button" onclick="switchWillViewMode('doc')" class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition cursor-pointer">
+                  ← Back to Will Document
+                </button>
+                <button id="save-will-btn" type="submit" class="px-5 py-2.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-bold transition shadow-xs cursor-pointer">
+                  Save Will Details & Update Document
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Summary & Legal Preview Sidebar -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm mb-3">Statutory Legal Summary</h3>
+              <div id="will-preview-summary">
+                <!-- Rendered by JS -->
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 text-center space-y-2">
+              <button onclick="downloadWillPDF()" class="w-full py-2.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-bold shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
+                <span>📄 Generate Official Legal PDF</span>
+              </button>
+              <button onclick="switchWillViewMode('doc')" class="w-full py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-bold transition cursor-pointer">
+                <span>👁️ View Formatted Will Document</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 5: ENCRYPTED DOCUMENT VAULT -->
+    <!-- ========================================== -->
+    <section id="pane-vault" class="tab-pane hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-black text-slate-900 tracking-tight">Encrypted Document Vault (Fernet AES-128-CBC + HMAC-SHA256)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Cryptographically isolated storage for shop deeds, partnership agreements, FDRs, and registration records</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="runVaultAudit()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border text-xs font-bold text-slate-700 transition">
+            🛡️ Security Audit
+          </button>
+          <button onclick="openSROGuideModal()" class="px-3.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-bold transition">
+            🏛️ Sub-Registrar Guide
+          </button>
+        </div>
+      </div>
+
+      <!-- SRO Will Registration Reminder Card (M3 Subsystem) -->
+      <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">🏛️</span>
+            <span class="font-bold text-amber-900 text-sm">Sub-Registrar Office (SRO) Will Registration Reminder</span>
+            <span id="vault-sro-status-tag" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-200 text-amber-900">Tracking Active</span>
+          </div>
+          <p class="text-xs text-amber-800">
+            Target SRO Appointment Date: <strong id="vault-sro-date-display" class="font-mono">Loading...</strong>. Under Section 18 of Indian Registration Act 1908, will registration is optional but provides conclusive evidentiary proof against fraud.
+          </p>
+        </div>
+        <form id="vault-sro-reminder-form" onsubmit="saveSROReminderDate(event)" class="flex items-center gap-2 text-xs">
+          <input type="date" id="vault-sro-date-input" required class="border border-amber-300 rounded-lg px-2.5 py-1.5 bg-white text-slate-800 font-mono text-xs">
+          <button type="submit" class="px-3.5 py-1.5 rounded-lg bg-amber-700 hover:bg-amber-800 text-white font-bold transition whitespace-nowrap shadow-xs">
+            📅 Set / Update Reminder
+          </button>
+        </form>
+      </div>
+
+      <!-- Upload Form Card -->
+      <div id="vault-upload-card" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+        <h3 class="font-bold text-slate-900 text-sm mb-3">Secure Document Upload (Client-to-Disk Encryption + Renewal Alert)</h3>
+        <form id="vault-upload-form" class="space-y-3 text-xs">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Select File (PDF, TXT, JPG) *</label>
+              <input type="file" id="vault-file-input" required class="w-full border rounded-lg p-2 text-xs bg-slate-50">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Document Category *</label>
+              <select id="vault-category" class="w-full border rounded-lg p-2.5 bg-slate-50 font-medium">
+                <option value="registry_deed">Shop / Property Sale Deed</option>
+                <option value="partnership_deed">Partnership Deed & Addendum</option>
+                <option value="fd_receipt">Bank Term Deposit (FDR)</option>
+                <option value="gold_valuation">Gold & Jewellery Valuation</option>
+                <option value="gst_certificate">GST & Trade License</option>
+                <option value="will_draft">Registered Will Copy</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Document Renewal / Expiry Title (Optional)</label>
+              <input type="text" id="vault-reminder-title" placeholder="e.g. GST Annual Filing / FDR Maturity Renewal" class="w-full border rounded-lg p-2 text-xs bg-slate-50">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Expiry or Renewal Target Date (Optional)</label>
+              <input type="date" id="vault-expiry-date" class="w-full border rounded-lg p-2 text-xs bg-slate-50 font-mono">
+            </div>
+          </div>
+          <div class="pt-1 flex justify-end">
+            <button type="submit" class="py-2.5 px-6 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
+              <span>🔒 Encrypt & Vault with Renewal Reminder</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Stored Vault Documents List -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+        <h3 class="font-bold text-slate-900 text-sm mb-4">Vaulted Documents</h3>
+        <div id="vault-docs-list" class="space-y-3">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Missing Asset Documents Audit -->
+      <div class="bg-white rounded-2xl border border-rose-200/80 p-6 shadow-xs">
+        <div class="flex items-center justify-between pb-3 border-b border-rose-100">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-rose-50 text-rose-700 border border-rose-200 flex items-center justify-center text-sm">🔴</span>
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm">Assets Missing Verification Documents</h3>
+              <p class="text-[11px] text-slate-500">Properties and accounts in your inventory with no uploaded deed or receipt</p>
+            </div>
+          </div>
+          <span id="vault-missing-docs-count" class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-rose-100 text-rose-800">
+            0 Assets Missing Docs
+          </span>
+        </div>
+        <div id="vault-missing-docs-list" class="mt-4 space-y-2.5">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 6: 'WHAT HAPPENS IF...' SIMULATOR -->
+    <!-- ========================================== -->
+    <section id="pane-simulator" class="tab-pane hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-black text-slate-900 tracking-tight">'What Happens If...' Legal Succession Simulator</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Interactive scenario simulator: Test intestate defaults, predeceased heirs, ademption, and registration impacts</p>
+        </div>
+        <div class="text-xs text-slate-500 bg-white border px-3 py-1.5 rounded-xl font-medium">
+          Estate Net Worth: <strong id="sim-networth" class="text-teal-700">₹0</strong> • Statutory Heirs: <strong id="sim-class1-count">0</strong>
+        </div>
+      </div>
+
+      <!-- Interactive Scenario Controls (M5 What-If Engine) -->
+      <div class="bg-gradient-to-r from-slate-900 to-teal-950 text-white rounded-2xl p-6 shadow-md space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-700/60 pb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🎛️</span>
+              <h3 class="font-bold text-base tracking-tight text-white">Interactive 'What-If' Scenario Playground (M5)</h3>
+              <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-teal-500/20 text-teal-300 border border-teal-500/40">Real-Time Legal Engine</span>
+            </div>
+            <p class="text-xs text-slate-300 mt-1">
+              Simulate how unexpected family deaths, disposed assets (Ademption), un-registered wills, or daughter exclusion alter succession splits under Indian Law.
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="runInteractiveSimulation()" class="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-black shadow transition flex items-center gap-1.5 cursor-pointer">
+              <span>⚡ Recalculate Scenario</span>
+            </button>
+            <button onclick="resetInteractiveSimulation()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition cursor-pointer">
+              <span>🔄 Reset Baseline</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+          <!-- Toggle 1: Predeceased Child -->
+          <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-3.5 space-y-2">
+            <label class="block font-bold text-teal-300">1. Predeceased Child (Sec 8/10)</label>
+            <p class="text-[11px] text-slate-400 leading-tight">What if a son/daughter predeceases Karta? Tests per stirpes representation to their spouse/children.</p>
+            <select id="sim-predeceased-child" onchange="runInteractiveSimulation()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              <option value="">None (All Heirs Alive)</option>
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <!-- Toggle 2: Ademption (Sold Asset) -->
+          <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-3.5 space-y-2">
+            <label class="block font-bold text-amber-300">2. Asset Sold / Gifted (Ademption)</label>
+            <p class="text-[11px] text-slate-400 leading-tight">Sec 152 Indian Succession Act: Specific legacy fails if property is disposed of during lifetime.</p>
+            <select id="sim-ademption-asset" onchange="runInteractiveSimulation()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              <option value="">None (All Assets Intact)</option>
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <!-- Toggle 3: Unregistered Will -->
+          <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-3.5 space-y-2">
+            <label class="block font-bold text-rose-300">3. SRO Registration Status</label>
+            <p class="text-[11px] text-slate-400 leading-tight">Unregistered will triggers probate disputes & handwriting challenges under Registration Act Sec 18.</p>
+            <label class="flex items-center gap-2 mt-2.5 cursor-pointer">
+              <input type="checkbox" id="sim-toggle-unregistered" onchange="runInteractiveSimulation()" class="rounded border-slate-600 text-teal-500 focus:ring-0">
+              <span class="text-xs text-slate-200 font-semibold">Simulate Unregistered Will</span>
+            </label>
+          </div>
+
+          <!-- Toggle 4: Exclude Daughter from Ancestral -->
+          <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-3.5 space-y-2">
+            <label class="block font-bold text-indigo-300">4. Daughter Exclusion (Sec 6 HSA)</label>
+            <p class="text-[11px] text-slate-400 leading-tight">Test exclusion against 2020 Supreme Court Vineeta Sharma ruling on birthright coparcenary.</p>
+            <label class="flex items-center gap-2 mt-2.5 cursor-pointer">
+              <input type="checkbox" id="sim-toggle-exclude-daughter" onchange="runInteractiveSimulation()" class="rounded border-slate-600 text-teal-500 focus:ring-0">
+              <span class="text-xs text-slate-200 font-semibold">Exclude Daughters from Ancestral</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Doughnut Charts Comparison Row -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Scenario A: Bina Will (Intestate) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div>
+              <h3 class="font-bold text-red-800 text-base" id="sim-scenario-a-title">Scenario A: Without Will (Intestate Distribution)</h3>
+              <p class="text-xs text-slate-500">Section 10 Hindu Succession Act mandatory equal distribution</p>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-red-100 text-red-800">Default Court Rule</span>
+          </div>
+          <div class="mt-4 flex flex-col items-center">
+            <div class="w-64 h-64">
+              <canvas id="chart-intestate"></canvas>
+            </div>
+            <p class="text-[11px] text-slate-500 text-center mt-3">
+              Equal statutory split among surviving spouse, mother, sons, and married/unmarried daughters.
+            </p>
+          </div>
+        </div>
+
+        <!-- Scenario B: With Will (Testate) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div>
+              <h3 class="font-bold text-teal-800 text-base" id="sim-scenario-b-title">Scenario B: With Registered Will (Testamentary Plan)</h3>
+              <p class="text-xs text-slate-500">Your tailored distribution protecting business continuity</p>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-teal-100 text-teal-800">Your Plan</span>
+          </div>
+          <div class="mt-4 flex flex-col items-center">
+            <div class="w-64 h-64">
+              <canvas id="chart-testate"></canvas>
+            </div>
+            <p class="text-[11px] text-slate-500 text-center mt-3">
+              Shop allotted to active store-running heir, liquid security to spouse, and gold/cash to daughters.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Side-by-Side Comparison Table -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="p-4 border-b border-slate-100 font-bold text-slate-800 text-sm">
+          Per-Heir Asset Split Comparison (Statutory vs Will)
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-3">Family Member</th>
+                <th class="py-3 px-3" id="sim-th-intestate">Intestate Share (Without Will)</th>
+                <th class="py-3 px-3" id="sim-th-testate">Will Share (With Will)</th>
+                <th class="py-3 px-3">Variance / Delta</th>
+              </tr>
+            </thead>
+            <tbody id="sim-comparison-table">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Dispute Friction Points & Remedies -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+        <h3 class="font-bold text-slate-900 text-sm">Legal Friction Points & Court Precedents</h3>
+        <div id="sim-pitfalls-container" class="space-y-3">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 7: CA & LEGAL AUDIT -->
+    <!-- ========================================== -->
+    <section id="pane-advisor" class="tab-pane hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-black text-slate-900 tracking-tight">CA & Legal Advisor Audit Portal</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Professional compliance review for Chartered Accountants, Tax Auditors, and High Court Advocates</p>
+        </div>
+        <button onclick="openAddNoteModal()" class="px-3.5 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+          <span>+ Add Advisory Note</span>
+        </button>
+      </div>
+
+      <!-- Checklist Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="p-4 rounded-xl border bg-white shadow-xs space-y-2">
+          <span class="font-bold text-teal-800 block text-sm">✅ Tax & TDS Verification</span>
+          <p class="text-slate-600">No wealth tax in India. Inheritance is free from Income Tax under Sec 56(2) for specified legal relatives.</p>
+        </div>
+        <div class="p-4 rounded-xl border bg-white shadow-xs space-y-2">
+          <span class="font-bold text-teal-800 block text-sm">✅ Section 6 HSA Coparcenary</span>
+          <p class="text-slate-600">Ensures daughters' equal rights in ancestral coparcenary property (Supreme Court 2020 landmark).</p>
+        </div>
+        <div class="p-4 rounded-xl border bg-white shadow-xs space-y-2">
+          <span class="font-bold text-teal-800 block text-sm">✅ Partnership Succession</span>
+          <p class="text-slate-600">Verifies partnership firm addendum under Partnership Act 1932 to prevent dissolution on partner demise.</p>
+        </div>
+      </div>
+
+      <!-- Notes Feed -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+        <h3 class="font-bold text-slate-900 text-sm">Auditor Notes & Observations</h3>
+        <div id="advisor-notes-list" class="space-y-3">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 8: WILL & NOMINATION GAP TRACKER -->
+    <!-- ========================================== -->
+    <section id="pane-tracker" class="tab-pane hidden space-y-6">
+      <!-- Header Card -->
+      <div class="heritage-card p-6 bg-white border border-[#ede6da] rounded-2xl shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">
+              ⚖️ Landmark Legal Audit
+            </span>
+            <span class="text-xs text-stone-500 font-medium">Sarbati Devi v. Usha Devi (1984) Enforcement</span>
+          </div>
+          <h2 class="text-2xl font-black text-stone-900 serif-title mt-1">Will & Nomination Gap Detector</h2>
+          <p class="text-xs text-stone-600 max-w-2xl mt-1">
+            In Indian Law, a bank or demat nominee is <strong>only a custodian/trustee</strong>, not the legal owner. When a bank nomination contradicts a will bequest, funds are released to the nominee who may refuse transfer to the true heir, sparking civil litigation.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button onclick="refreshNominationTracker()" class="px-3.5 py-2 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+            <span>🔄</span><span>Refresh Audit</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Summary Stat Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+        <div class="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 flex flex-col justify-between">
+          <span class="text-xs font-semibold text-emerald-800">Aligned Assets</span>
+          <div id="tracker-stat-aligned" class="text-2xl font-black text-emerald-700 serif-title mt-1">0</div>
+          <span class="text-[10px] text-emerald-600">Nominee & Will Match</span>
+        </div>
+        <div class="p-4 rounded-xl border border-rose-200 bg-rose-50/50 flex flex-col justify-between">
+          <span class="text-xs font-semibold text-rose-800">Critical Conflicts</span>
+          <div id="tracker-stat-discrepancy" class="text-2xl font-black text-rose-700 serif-title mt-1">0</div>
+          <span class="text-[10px] text-rose-600">Litigation Risk</span>
+        </div>
+        <div class="p-4 rounded-xl border border-amber-200 bg-amber-50/50 flex flex-col justify-between">
+          <span class="text-xs font-semibold text-amber-800">Missing Nominees</span>
+          <div id="tracker-stat-missing-nom" class="text-2xl font-black text-amber-700 serif-title mt-1">0</div>
+          <span class="text-[10px] text-amber-600">Disbursement Delay</span>
+        </div>
+        <div class="p-4 rounded-xl border border-blue-200 bg-blue-50/50 flex flex-col justify-between">
+          <span class="text-xs font-semibold text-blue-800">Missing Will Bequests</span>
+          <div id="tracker-stat-missing-will" class="text-2xl font-black text-blue-700 serif-title mt-1">0</div>
+          <span class="text-[10px] text-blue-600">Intestate Risk</span>
+        </div>
+      </div>
+
+      <!-- Filter Controls & Search -->
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div class="flex items-center gap-1.5 overflow-x-auto py-1">
+          <button onclick="filterTracker('all')" id="tracker-filter-all" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-teal-800 text-white cursor-pointer">All Assets</button>
+          <button onclick="filterTracker('DISCREPANCY')" id="tracker-filter-discrepancy" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-100 hover:bg-rose-200 text-rose-800 cursor-pointer">Conflicts Only ⚠️</button>
+          <button onclick="filterTracker('MISSING_NOMINEE')" id="tracker-filter-missing-nom" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-800 cursor-pointer">Missing Nominees</button>
+          <button onclick="filterTracker('MISSING_WILL_BEQUEST')" id="tracker-filter-missing-will" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-100 hover:bg-blue-200 text-blue-800 cursor-pointer">Missing Will Allocation</button>
+          <button onclick="filterTracker('ALIGNED')" id="tracker-filter-aligned" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-800 cursor-pointer">Aligned Only ✓</button>
+        </div>
+      </div>
+
+      <!-- Tracker Table Container -->
+      <div class="bg-white rounded-2xl border border-stone-200 shadow-xs overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-stone-50 border-b border-stone-200 text-stone-600 font-bold uppercase text-[10px]">
+              <tr>
+                <th class="p-3.5">Asset Title & Class</th>
+                <th class="p-3.5">Valuation</th>
+                <th class="p-3.5">Institutional Nominee</th>
+                <th class="p-3.5">Will Beneficiary</th>
+                <th class="p-3.5">Vault Deed</th>
+                <th class="p-3.5">Alignment Status</th>
+                <th class="p-3.5">Legal Impact & Action</th>
+              </tr>
+            </thead>
+            <tbody id="tracker-table-body" class="divide-y divide-stone-100 text-stone-800 font-medium">
+              <!-- Rendered dynamically by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 9: AI FAMILY LEGACY ADVISOR -->
+    <!-- ========================================== -->
+    <section id="pane-legacy-advisor" class="tab-pane hidden space-y-6">
+      <!-- Header Card -->
+      <div class="heritage-card p-6 bg-white border border-[#ede6da] rounded-2xl shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800 border border-teal-200">
+              🤖 AI Legal & Legacy Intelligence
+            </span>
+            <span class="text-xs text-stone-500 font-medium">Indian Succession Act & Shariat Trained</span>
+          </div>
+          <h2 class="text-2xl font-black text-stone-900 serif-title mt-1">AI Family Legacy Advisor</h2>
+          <p class="text-xs text-stone-600 max-w-2xl mt-1">
+            Instant, confidential legal guidance analyzing your family tree, asset allocation, nominee gaps, partnership deed risks, and coparcenary rights.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="clearAdvisorChat()" class="px-3 py-1.5 rounded-lg border border-stone-200 text-xs font-semibold text-stone-600 hover:bg-stone-50 cursor-pointer">
+            Clear Chat
+          </button>
+        </div>
+      </div>
+
+      <!-- Recommended Query Pills -->
+      <div class="space-y-1.5">
+        <div class="text-[11px] font-bold text-stone-500 uppercase tracking-wider" id="advisor-inquiries-title">Suggested Quick Inquiries:</div>
+        <div class="flex items-center gap-2 flex-wrap text-xs">
+          <button id="adv-pill-1" onclick="askAdvisorQuery('What is the difference between a bank nominee and a will beneficiary under Indian law?')" class="px-3 py-1.5 rounded-full bg-white hover:bg-amber-50 border border-amber-200 text-amber-900 font-semibold shadow-2xs transition cursor-pointer">
+            ⚠️ Nominee vs Will Beneficiary
+          </button>
+          <button id="adv-pill-2" onclick="askAdvisorQuery('What are daughters coparcenary rights in ancestral joint family property?')" class="px-3 py-1.5 rounded-full bg-white hover:bg-teal-50 border border-teal-200 text-teal-900 font-semibold shadow-2xs transition cursor-pointer">
+            👩‍👧 Daughters' Coparcenary Rights
+          </button>
+          <button id="adv-pill-3" onclick="askAdvisorQuery('How can we protect our partnership firm and shop from dissolution upon demise?')" class="px-3 py-1.5 rounded-full bg-white hover:bg-blue-50 border border-blue-200 text-blue-900 font-semibold shadow-2xs transition cursor-pointer">
+            🏢 Protect Business & Shop
+          </button>
+          <button id="adv-pill-4" onclick="askAdvisorQuery('How can our family improve our estate and succession readiness score?')" class="px-3 py-1.5 rounded-full bg-white hover:bg-emerald-50 border border-emerald-200 text-emerald-900 font-semibold shadow-2xs transition cursor-pointer">
+            📊 Improve Readiness Score
+          </button>
+          <button id="adv-pill-5" onclick="askAdvisorQuery('What are the rules and process to register a will at the Sub-Registrar office?')" class="px-3 py-1.5 rounded-full bg-white hover:bg-stone-50 border border-stone-300 text-stone-800 font-semibold shadow-2xs transition cursor-pointer">
+            🏛️ SRO Will Registration Rules
+          </button>
+        </div>
+      </div>
+
+      <!-- Chat Thread Container -->
+      <div class="bg-white rounded-2xl border border-stone-200 shadow-xs flex flex-col h-[520px] overflow-hidden">
+        <!-- Message Stream -->
+        <div id="advisor-chat-stream" class="flex-1 p-5 overflow-y-auto space-y-4">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Chat Input Footer -->
+        <div class="p-3 bg-stone-50 border-t border-stone-200">
+          <form id="advisor-chat-form" onsubmit="handleAdvisorSubmit(event)" class="flex items-center gap-2">
+            <input type="text" id="advisor-user-input" placeholder="Ask a legal or succession question: e.g. 'Daughter rights', 'Nominee rules', 'Business continuity'..." class="flex-1 px-4 py-2.5 rounded-xl border border-stone-300 bg-white text-xs font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 shadow-inner">
+            <button type="submit" id="advisor-send-btn" class="px-4 py-2.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer shrink-0">
+              <span id="advisor-send-btn-text">Ask Advisor</span>
+              <span>&rarr;</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>
+        <strong>VirasatPlanner</strong> — Empowering Indian Small Traders & Families with Transparent Succession.
+      </div>
+      <div class="text-[11px] text-slate-400">
+        Informed by Indian Succession Act 1925 & Hindu Succession Act 1956. For formal litigation, consult an enrolled Advocate.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================== -->
+  <!-- MODALS (Fully Accessible with WCAG Dialog pattern & Light Dismiss) -->
+  <!-- ========================================== -->
+
+  <!-- Add Member Modal -->
+  <div id="add-member-modal" role="dialog" aria-modal="true" aria-labelledby="heading-add-member" onclick="if(event.target === this) closeAddMemberModal()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl modal-enter space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 id="heading-add-member" class="font-bold text-slate-900 text-base">Add Family Member</h3>
+        <button onclick="closeAddMemberModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1 rounded-lg" aria-label="Close dialog">&times;</button>
+      </div>
+      <form id="add-member-form" class="space-y-3 text-xs">
+        <div>
+          <label for="mem-name" class="block font-semibold text-slate-700 mb-1 is-required">Full Name</label>
+          <input type="text" id="mem-name" required class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="mem-relation" class="block font-semibold text-slate-700 mb-1 is-required">Relationship</label>
+            <select id="mem-relation" class="w-full border rounded-lg p-2.5 bg-slate-50 font-medium focus:bg-white">
+              <option value="Spouse">Spouse / Wife</option>
+              <option value="Son">Son</option>
+              <option value="Daughter">Daughter</option>
+              <option value="Mother">Mother</option>
+              <option value="Father">Father</option>
+              <option value="Daughter-in-law">Daughter-in-law</option>
+              <option value="Grandson">Grandson</option>
+              <option value="Granddaughter">Granddaughter</option>
+              <option value="Brother">Brother</option>
+              <option value="Sister">Sister</option>
+            </select>
+          </div>
+          <div>
+            <label for="mem-gender" class="block font-semibold text-slate-700 mb-1">Gender</label>
+            <select id="mem-gender" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="mem-age" class="block font-semibold text-slate-700 mb-1 is-required">Age</label>
+            <input type="number" id="mem-age" required min="0" max="120" placeholder="e.g. 28" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+          <div>
+            <label for="mem-marital" class="block font-semibold text-slate-700 mb-1">Marital Status</label>
+            <select id="mem-marital" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+              <option value="Married">Married</option>
+              <option value="Single">Single</option>
+              <option value="Widow">Widow / Widower</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="mem-notes" class="block font-semibold text-slate-700 mb-1">Special Notes</label>
+          <input type="text" id="mem-notes" placeholder="e.g. Manages store counter, lives in Jaipur, etc." class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeAddMemberModal()" class="px-4 py-2 rounded-xl border text-slate-600 font-semibold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold">Save Member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Asset Modal -->
+  <div id="add-asset-modal" role="dialog" aria-modal="true" aria-labelledby="heading-add-asset" onclick="if(event.target === this) closeAddAssetModal()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl modal-enter space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 id="heading-add-asset" class="font-bold text-slate-900 text-base">Add New Asset or Property</h3>
+        <button onclick="closeAddAssetModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1 rounded-lg" aria-label="Close dialog">&times;</button>
+      </div>
+      <form id="add-asset-form" class="space-y-3 text-xs">
+        <div>
+          <label for="ast-title" class="block font-semibold text-slate-700 mb-1 is-required">Asset Title</label>
+          <input type="text" id="ast-title" required placeholder="e.g. Shop #12 Chandni Chowk, SBI Fixed Deposit" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="ast-category" class="block font-semibold text-slate-700 mb-1 is-required">Category</label>
+            <select id="ast-category" class="w-full border rounded-lg p-2.5 bg-slate-50 font-medium focus:bg-white">
+              <option value="commercial_shop">Commercial Shop / Store</option>
+              <option value="residential_property">Residential Property</option>
+              <option value="agricultural_land">Agricultural Farmland</option>
+              <option value="partnership_firm">Business / Partnership Share</option>
+              <option value="bank_fd">Bank Fixed Deposit</option>
+              <option value="savings_account">Bank Savings Account</option>
+              <option value="demat_stocks">Demat Shares & Mutual Funds</option>
+              <option value="gold_jewellery">Gold & Jewellery</option>
+              <option value="vehicle">Commercial Vehicle</option>
+              <option value="liability_loan">Liability / Loan / Debt</option>
+            </select>
+          </div>
+          <div>
+            <label for="ast-value" class="block font-semibold text-slate-700 mb-1 is-required">Estimated Value (INR)</label>
+            <input type="number" id="ast-value" required placeholder="1500000" class="w-full border rounded-lg p-2.5 bg-slate-50 font-mono focus:bg-white">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="ast-identifier" class="block font-semibold text-slate-700 mb-1">Identifier / Registry / Account No</label>
+            <input type="text" id="ast-identifier" placeholder="e.g. Deed No 4482, SBI A/c 8491" class="w-full border rounded-lg p-2.5 bg-slate-50 font-mono focus:bg-white">
+          </div>
+          <div>
+            <label for="ast-location" class="block font-semibold text-slate-700 mb-1">Location or Institution</label>
+            <input type="text" id="ast-location" placeholder="e.g. Chandni Chowk Branch" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="ast-acq" class="block font-semibold text-slate-700 mb-1">Acquisition Type</label>
+            <select id="ast-acq" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+              <option value="self_acquired">Self Acquired</option>
+              <option value="ancestral_huf">Ancestral / HUF</option>
+              <option value="inherited">Inherited</option>
+            </select>
+          </div>
+          <div>
+            <label for="ast-nominee" class="block font-semibold text-slate-700 mb-1">Existing Bank Nominee Name</label>
+            <input type="text" id="ast-nominee" placeholder="Name as per bank form" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+        </div>
+        <div>
+          <label for="ast-nominee-rel" class="block font-semibold text-slate-700 mb-1">Nominee Relationship</label>
+          <input type="text" id="ast-nominee-rel" placeholder="e.g. Son, Brother" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+        </div>
+        <div>
+          <label for="ast-desc" class="block font-semibold text-slate-700 mb-1">Description</label>
+          <textarea id="ast-desc" rows="2" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white" placeholder="Area, floor, maturity dates..."></textarea>
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeAddAssetModal()" class="px-4 py-2 rounded-xl border text-slate-600 font-semibold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold">Save Asset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Asset Allocation Modal -->
+  <div id="allocation-modal" role="dialog" aria-modal="true" aria-labelledby="heading-allocation" onclick="if(event.target === this) closeAllocationModal()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl modal-enter space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div>
+          <h3 id="heading-allocation" class="font-bold text-slate-900 text-base">Bequeath Asset</h3>
+          <p id="alloc-asset-title" class="text-xs text-teal-700 font-bold mt-0.5">Asset Title</p>
+        </div>
+        <button onclick="closeAllocationModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1 rounded-lg" aria-label="Close dialog">&times;</button>
+      </div>
+      <form id="allocation-form" class="space-y-3 text-xs">
+        <div class="p-3 rounded-lg bg-slate-50 border text-slate-600">
+          Estimated Valuation: <strong id="alloc-asset-value" class="text-slate-800">₹0</strong>
+        </div>
+        <div>
+          <label for="alloc-beneficiary" class="block font-semibold text-slate-700 mb-1 is-required">Designated Beneficiary (Waaris)</label>
+          <select id="alloc-beneficiary" class="w-full border rounded-lg p-2.5 bg-slate-50 font-bold text-slate-800 focus:bg-white">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+        <div>
+          <label for="alloc-share-pct" class="block font-semibold text-slate-700 mb-1 is-required">Share Percentage (%)</label>
+          <input type="number" id="alloc-share-pct" value="100" min="1" max="100" class="w-full border rounded-lg p-2.5 bg-slate-50 font-bold focus:bg-white">
+        </div>
+        <div>
+          <label for="alloc-instructions" class="block font-semibold text-slate-700 mb-1">Special Instructions & Succession Clauses</label>
+          <textarea id="alloc-instructions" rows="2" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white" placeholder="e.g. Life interest to wife, or business continuity handover clause"></textarea>
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeAllocationModal()" class="px-4 py-2 rounded-xl border text-slate-600 font-semibold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold">Assign Bequest</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SRO Guide Modal -->
+  <div id="sro-modal" role="dialog" aria-modal="true" aria-labelledby="heading-sro-guide" onclick="if(event.target === this) closeSROModal()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl modal-enter space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div>
+          <h3 id="heading-sro-guide" class="font-bold text-slate-900 text-base">Sub-Registrar Office (SRO) Will Registration Guide</h3>
+          <p class="text-xs text-slate-500">Official procedure under Indian Registration Act 1908</p>
+        </div>
+        <button onclick="closeSROModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1 rounded-lg" aria-label="Close dialog">&times;</button>
+      </div>
+      <div id="sro-modal-content">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Member Details Modal -->
+  <div id="member-details-modal" role="dialog" aria-modal="true" aria-labelledby="heading-member-details" onclick="if(event.target === this) closeMemberDetailsModal()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl modal-enter space-y-4">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <h3 id="heading-member-details" class="font-bold text-slate-900 text-sm">Family Member Details & Rights</h3>
+        <button onclick="closeMemberDetailsModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1 rounded-lg" aria-label="Close dialog">&times;</button>
+      </div>
+      <div id="member-modal-content">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Advisor Note Modal -->
+  <div id="add-note-modal" role="dialog" aria-modal="true" aria-labelledby="heading-add-note" onclick="if(event.target === this) closeAddNoteModal()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl modal-enter space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 id="heading-add-note" class="font-bold text-slate-900 text-base">Add CA / Legal Advisor Observation</h3>
+        <button onclick="closeAddNoteModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1 rounded-lg" aria-label="Close dialog">&times;</button>
+      </div>
+      <form id="add-note-form" class="space-y-3 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="note-author-name" class="block font-semibold text-slate-700 mb-1">Author Name</label>
+            <input type="text" id="note-author-name" value="CA Ramesh Chawla" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+          <div>
+            <label for="note-author-role" class="block font-semibold text-slate-700 mb-1">Professional Title</label>
+            <input type="text" id="note-author-role" value="Chartered Accountant" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="note-category" class="block font-semibold text-slate-700 mb-1">Category</label>
+            <select id="note-category" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+              <option value="tax_risk">Tax & Financial Risk</option>
+              <option value="succession_conflict">Succession Law Conflict</option>
+              <option value="valuation_gap">Valuation Gap</option>
+            </select>
+          </div>
+          <div>
+            <label for="note-severity" class="block font-semibold text-slate-700 mb-1">Severity</label>
+            <select id="note-severity" class="w-full border rounded-lg p-2.5 bg-slate-50 font-bold focus:bg-white">
+              <option value="warning">Warning</option>
+              <option value="critical">Critical</option>
+              <option value="info">Informational</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="note-text" class="block font-semibold text-slate-700 mb-1 is-required">Observation / Advisory Text</label>
+          <textarea id="note-text" required rows="3" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white" placeholder="Detail the tax, nomination, or partition conflict..."></textarea>
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeAddNoteModal()" class="px-4 py-2 rounded-xl border text-slate-600 font-semibold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold">Post Audit Note</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- New Profile Modal (Create Your Own Plan) -->
+  <div id="new-profile-modal" role="dialog" aria-modal="true" aria-labelledby="heading-new-profile" onclick="if(event.target === this) closeNewProfileModal()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl modal-enter space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div>
+          <h3 id="heading-new-profile" class="font-bold text-slate-900 text-base">Create Your Own Family Succession Plan</h3>
+          <p class="text-xs text-slate-500">Enter your family & business details to start a fresh, custom succession plan</p>
+        </div>
+        <button onclick="closeNewProfileModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1 rounded-lg" aria-label="Close dialog">&times;</button>
+      </div>
+      <form id="new-profile-form" class="space-y-3 text-xs">
+        <div>
+          <label for="new-profile-title" class="block font-semibold text-slate-700 mb-1 is-required">Plan / Family Title</label>
+          <input type="text" id="new-profile-title" required placeholder="e.g. Verma Family Estate & Succession Plan" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="new-profile-karta" class="block font-semibold text-slate-700 mb-1 is-required">Head of Family / Karta Name</label>
+            <input type="text" id="new-profile-karta" required placeholder="e.g. Ramesh Chandra Verma" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500">
+          </div>
+          <div>
+            <label for="new-profile-biz" class="block font-semibold text-slate-700 mb-1 is-required">Business / Firm Name</label>
+            <input type="text" id="new-profile-biz" required placeholder="e.g. M/s Verma Textiles & Sarees" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500">
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label for="new-profile-karta-age" class="block font-semibold text-slate-700 mb-1 is-required">Karta Age</label>
+            <input type="number" id="new-profile-karta-age" required min="18" max="120" placeholder="e.g. 52" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500">
+          </div>
+          <div>
+            <label for="new-profile-karta-gender" class="block font-semibold text-slate-700 mb-1">Gender</label>
+            <select id="new-profile-karta-gender" class="w-full border rounded-lg p-2.5 bg-slate-50 font-medium focus:bg-white">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="new-profile-karta-marital" class="block font-semibold text-slate-700 mb-1">Marital Status</label>
+            <select id="new-profile-karta-marital" class="w-full border rounded-lg p-2.5 bg-slate-50 font-medium focus:bg-white">
+              <option value="Married">Married</option>
+              <option value="Single">Single</option>
+              <option value="Widow">Widowed</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="new-profile-biz-type" class="block font-semibold text-slate-700 mb-1">Business Type</label>
+            <select id="new-profile-biz-type" class="w-full border rounded-lg p-2.5 bg-slate-50 font-medium focus:bg-white">
+              <option value="Sole Proprietorship">Sole Proprietorship</option>
+              <option value="Partnership Firm">Partnership Firm</option>
+              <option value="Hindu Undivided Family (HUF)">Hindu Undivided Family (HUF)</option>
+              <option value="Private Limited">Private Limited Company</option>
+            </select>
+          </div>
+          <div>
+            <label for="new-profile-city" class="block font-semibold text-slate-700 mb-1 is-required">City</label>
+            <input type="text" id="new-profile-city" required placeholder="e.g. Kanpur, Surat, Delhi, Varanasi" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="new-profile-state" class="block font-semibold text-slate-700 mb-1 is-required">State</label>
+            <input type="text" id="new-profile-state" required placeholder="e.g. Uttar Pradesh, Gujarat, Delhi" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+          <div>
+            <label for="new-profile-gstin" class="block font-semibold text-slate-700 mb-1">PAN or GSTIN (Optional)</label>
+            <input type="text" id="new-profile-gstin" placeholder="e.g. 09AAAFV1234D1Z2" class="w-full border rounded-lg p-2.5 bg-slate-50 font-mono focus:bg-white">
+          </div>
+        </div>
+        <div>
+          <label for="new-profile-law" class="block font-semibold text-slate-700 mb-1">Governing Succession Law</label>
+          <select id="new-profile-law" class="w-full border rounded-lg p-2.5 bg-slate-50 font-medium focus:bg-white">
+            <option value="Hindu Succession Act, 1956 (amended 2005)">Hindu Succession Act, 1956 (amended 2005) — Hindu, Sikh, Jain, Buddhist</option>
+            <option value="Indian Succession Act, 1925">Indian Succession Act, 1925 — Christian, Parsi, Civil Marriages</option>
+          </select>
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeNewProfileModal()" class="px-4 py-2 rounded-xl border text-slate-600 font-semibold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold">Create Estate Plan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div id="edit-profile-modal" role="dialog" aria-modal="true" aria-labelledby="heading-edit-profile" onclick="if(event.target === this) closeEditProfileModal()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl modal-enter space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div>
+          <h3 id="heading-edit-profile" class="font-bold text-slate-900 text-base">Edit Estate & Business Details</h3>
+          <p class="text-xs text-slate-500">Update business title, Karta name, and location</p>
+        </div>
+        <button onclick="closeEditProfileModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1 rounded-lg" aria-label="Close dialog">&times;</button>
+      </div>
+      <form id="edit-profile-form" class="space-y-3 text-xs">
+        <div>
+          <label for="edit-profile-title" class="block font-semibold text-slate-700 mb-1 is-required">Plan / Family Title</label>
+          <input type="text" id="edit-profile-title" required class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label for="edit-profile-karta" class="block font-semibold text-slate-700 mb-1 is-required">Head of Family / Karta</label>
+            <input type="text" id="edit-profile-karta" required class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+          <div>
+            <label for="edit-profile-karta-age" class="block font-semibold text-slate-700 mb-1">Karta Age</label>
+            <input type="number" id="edit-profile-karta-age" min="18" max="120" placeholder="e.g. 52" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+          <div>
+            <label for="edit-profile-biz" class="block font-semibold text-slate-700 mb-1 is-required">Business / Firm</label>
+            <input type="text" id="edit-profile-biz" required class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="edit-profile-biz-type" class="block font-semibold text-slate-700 mb-1">Business Type</label>
+            <select id="edit-profile-biz-type" class="w-full border rounded-lg p-2.5 bg-slate-50 font-medium focus:bg-white">
+              <option value="Sole Proprietorship">Sole Proprietorship</option>
+              <option value="Partnership Firm">Partnership Firm</option>
+              <option value="Hindu Undivided Family (HUF)">Hindu Undivided Family (HUF)</option>
+              <option value="Private Limited">Private Limited</option>
+            </select>
+          </div>
+          <div>
+            <label for="edit-profile-city" class="block font-semibold text-slate-700 mb-1 is-required">City</label>
+            <input type="text" id="edit-profile-city" required class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="edit-profile-state" class="block font-semibold text-slate-700 mb-1 is-required">State</label>
+            <input type="text" id="edit-profile-state" required class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+          <div>
+            <label for="edit-profile-gstin" class="block font-semibold text-slate-700 mb-1">PAN or GSTIN</label>
+            <input type="text" id="edit-profile-gstin" class="w-full border rounded-lg p-2.5 bg-slate-50 font-mono focus:bg-white">
+          </div>
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeEditProfileModal()" class="px-4 py-2 rounded-xl border text-slate-600 font-semibold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold">Update Details</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Family Member Modal -->
+  <div id="edit-member-modal" role="dialog" aria-modal="true" aria-labelledby="heading-edit-member" onclick="if(event.target === this) closeEditMemberModal()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl modal-enter space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 id="heading-edit-member" class="font-bold text-slate-900 text-base">Edit Family Member</h3>
+        <button onclick="closeEditMemberModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1 rounded-lg" aria-label="Close dialog">&times;</button>
+      </div>
+      <form id="edit-member-form" class="space-y-3 text-xs">
+        <input type="hidden" id="edit-mem-id">
+        <div>
+          <label for="edit-mem-name" class="block font-semibold text-slate-700 mb-1 is-required">Full Name</label>
+          <input type="text" id="edit-mem-name" required class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="edit-mem-relation" class="block font-semibold text-slate-700 mb-1 is-required">Relationship</label>
+            <select id="edit-mem-relation" class="w-full border rounded-lg p-2.5 bg-slate-50 font-medium focus:bg-white">
+              <option value="Spouse">Spouse / Wife</option>
+              <option value="Son">Son</option>
+              <option value="Daughter">Daughter</option>
+              <option value="Mother">Mother</option>
+              <option value="Father">Father</option>
+              <option value="Daughter-in-law">Daughter-in-law</option>
+              <option value="Grandson">Grandson</option>
+              <option value="Granddaughter">Granddaughter</option>
+              <option value="Brother">Brother</option>
+              <option value="Sister">Sister</option>
+              <option value="Self">Self (Karta)</option>
+            </select>
+          </div>
+          <div>
+            <label for="edit-mem-gender" class="block font-semibold text-slate-700 mb-1">Gender</label>
+            <select id="edit-mem-gender" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="edit-mem-age" class="block font-semibold text-slate-700 mb-1 is-required">Age</label>
+            <input type="number" id="edit-mem-age" required min="0" max="120" placeholder="e.g. 28" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+          <div>
+            <label for="edit-mem-marital" class="block font-semibold text-slate-700 mb-1">Marital Status</label>
+            <select id="edit-mem-marital" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+              <option value="Married">Married</option>
+              <option value="Single">Single</option>
+              <option value="Widow">Widow / Widower</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="edit-mem-notes" class="block font-semibold text-slate-700 mb-1">Special Notes</label>
+          <input type="text" id="edit-mem-notes" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeEditMemberModal()" class="px-4 py-2 rounded-xl border text-slate-600 font-semibold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold">Update Member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Asset Modal -->
+  <div id="edit-asset-modal" role="dialog" aria-modal="true" aria-labelledby="heading-edit-asset" onclick="if(event.target === this) closeEditAssetModal()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl modal-enter space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 id="heading-edit-asset" class="font-bold text-slate-900 text-base">Edit Asset / Property Details</h3>
+        <button onclick="closeEditAssetModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1 rounded-lg" aria-label="Close dialog">&times;</button>
+      </div>
+      <form id="edit-asset-form" class="space-y-3 text-xs">
+        <input type="hidden" id="edit-ast-id">
+        <div>
+          <label for="edit-ast-title" class="block font-semibold text-slate-700 mb-1 is-required">Asset Title</label>
+          <input type="text" id="edit-ast-title" required class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="edit-ast-category" class="block font-semibold text-slate-700 mb-1 is-required">Category</label>
+            <select id="edit-ast-category" class="w-full border rounded-lg p-2.5 bg-slate-50 font-medium focus:bg-white">
+              <option value="commercial_shop">Commercial Shop / Store</option>
+              <option value="residential_property">Residential Property</option>
+              <option value="agricultural_land">Agricultural Farmland</option>
+              <option value="partnership_firm">Business / Partnership Share</option>
+              <option value="bank_fd">Bank Fixed Deposit</option>
+              <option value="savings_account">Bank Savings Account</option>
+              <option value="demat_stocks">Demat Shares & Mutual Funds</option>
+              <option value="gold_jewellery">Gold & Jewellery</option>
+              <option value="vehicle">Commercial Vehicle</option>
+              <option value="liability_loan">Liability / Loan / Debt</option>
+            </select>
+          </div>
+          <div>
+            <label for="edit-ast-value" class="block font-semibold text-slate-700 mb-1 is-required">Estimated Value (INR)</label>
+            <input type="number" id="edit-ast-value" required class="w-full border rounded-lg p-2.5 bg-slate-50 font-mono focus:bg-white">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="edit-ast-identifier" class="block font-semibold text-slate-700 mb-1">Identifier / Registry / Account No</label>
+            <input type="text" id="edit-ast-identifier" class="w-full border rounded-lg p-2.5 bg-slate-50 font-mono focus:bg-white">
+          </div>
+          <div>
+            <label for="edit-ast-location" class="block font-semibold text-slate-700 mb-1">Location or Institution</label>
+            <input type="text" id="edit-ast-location" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="edit-ast-acq" class="block font-semibold text-slate-700 mb-1">Acquisition Type</label>
+            <select id="edit-ast-acq" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+              <option value="self_acquired">Self Acquired</option>
+              <option value="ancestral_huf">Ancestral / HUF</option>
+              <option value="inherited">Inherited</option>
+            </select>
+          </div>
+          <div>
+            <label for="edit-ast-nominee" class="block font-semibold text-slate-700 mb-1">Existing Bank Nominee Name</label>
+            <input type="text" id="edit-ast-nominee" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+          </div>
+        </div>
+        <div>
+          <label for="edit-ast-nominee-rel" class="block font-semibold text-slate-700 mb-1">Nominee Relationship</label>
+          <input type="text" id="edit-ast-nominee-rel" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+        </div>
+        <div>
+          <label for="edit-ast-desc" class="block font-semibold text-slate-700 mb-1">Description</label>
+          <textarea id="edit-ast-desc" rows="2" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white"></textarea>
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeEditAssetModal()" class="px-4 py-2 rounded-xl border text-slate-600 font-semibold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold">Update Asset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Authentication & Account Modal (M4 Real Auth) -->
+  <div id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="heading-auth" onclick="if(event.target === this) closeAuthModal()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl modal-enter space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xl" aria-hidden="true">🔐</span>
+          <div>
+            <h3 id="heading-auth" class="font-bold text-slate-900 text-base">User Authentication & Role Access</h3>
+            <p class="text-[11px] text-slate-500">Salted PBKDF2 Hashing • HMAC Signed Sessions • Strict RBAC</p>
+          </div>
+        </div>
+        <button onclick="closeAuthModal()" class="text-slate-400 hover:text-slate-600 text-xl p-1 rounded-lg cursor-pointer" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <!-- Current Session Status -->
+      <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs flex items-center justify-between">
+        <div>
+          <span class="text-slate-500">Current Session:</span>
+          <span id="modal-current-user" class="font-bold text-slate-800 ml-1">karta_sharma</span>
+          <span id="modal-current-role" class="ml-1 px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase bg-teal-100 text-teal-800">patriarch</span>
+        </div>
+        <button onclick="logoutUser()" class="px-2.5 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold border border-rose-200 text-[11px] transition cursor-pointer" aria-label="Logout current user session">
+          🚪 Logout
+        </button>
+      </div>
+
+      <!-- Quick 1-Click Test Login for Active Scenario -->
+      <div class="space-y-1.5">
+        <span class="text-[11px] font-bold text-slate-600 block">1-Click Fast Login for Current Scenario:</span>
+        <div class="grid grid-cols-3 gap-2">
+          <button type="button" onclick="quickLoginRole('patriarch')" class="py-2 px-2 rounded-lg bg-teal-50 hover:bg-teal-100 border border-teal-200 text-teal-900 font-bold text-[11px] text-center transition cursor-pointer">
+            👑 Karta<br><span class="text-[10px] text-teal-700 font-normal">Full Access</span>
+          </button>
+          <button type="button" onclick="quickLoginRole('heir')" class="py-2 px-2 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-900 font-bold text-[11px] text-center transition cursor-pointer">
+            🧒 Heir<br><span class="text-[10px] text-blue-700 font-normal">Read-Only</span>
+          </button>
+          <button type="button" onclick="quickLoginRole('advisor')" class="py-2 px-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 font-bold text-[11px] text-center transition cursor-pointer">
+            ⚖️ CA / Legal Advisor<br><span class="text-[10px] text-amber-700 font-normal">Auditor</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Auth Tabs: Login vs Register -->
+      <div class="flex border-b border-slate-200 text-xs" role="tablist">
+        <button id="auth-tab-login-btn" role="tab" aria-selected="true" onclick="showAuthTab('login')" class="py-2 px-4 border-b-2 border-teal-600 font-bold text-teal-700 cursor-pointer">
+          Sign In
+        </button>
+        <button id="auth-tab-reg-btn" role="tab" aria-selected="false" onclick="showAuthTab('register')" class="py-2 px-4 border-b-2 border-transparent text-slate-500 font-semibold hover:text-slate-700 cursor-pointer">
+          Register New Account
+        </button>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="auth-login-form" onsubmit="handleLoginFormSubmit(event)" class="space-y-3 text-xs">
+        <div>
+          <label for="auth-login-username" class="block font-semibold text-slate-700 mb-1 is-required">Username</label>
+          <input type="text" id="auth-login-username" required placeholder="e.g. karta_sharma or rohit_heir" class="w-full border rounded-lg p-2.5 bg-slate-50 font-mono focus:bg-white">
+        </div>
+        <div>
+          <label for="auth-login-password" class="block font-semibold text-slate-700 mb-1 is-required">Password</label>
+          <input type="password" id="auth-login-password" required placeholder="Default seed: Virasat@2026" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+        </div>
+        <div id="auth-login-error" class="text-rose-600 text-[11px] font-semibold hidden" role="alert"></div>
+        <div class="pt-2 flex justify-end">
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold transition shadow-sm cursor-pointer">
+            Sign In with Session Token
+          </button>
+        </div>
+      </form>
+
+      <!-- Register Form -->
+      <form id="auth-register-form" onsubmit="handleRegisterFormSubmit(event)" class="space-y-3 text-xs hidden">
+        <div>
+          <label for="auth-reg-fullname" class="block font-semibold text-slate-700 mb-1 is-required">Full Name</label>
+          <input type="text" id="auth-reg-fullname" required placeholder="e.g. Priya Sharma" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+        </div>
+        <div>
+          <label for="auth-reg-username" class="block font-semibold text-slate-700 mb-1 is-required">New Username</label>
+          <input type="text" id="auth-reg-username" required placeholder="e.g. priya_heir" class="w-full border rounded-lg p-2.5 bg-slate-50 font-mono focus:bg-white">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="auth-reg-role" class="block font-semibold text-slate-700 mb-1 is-required">Role</label>
+            <select id="auth-reg-role" class="w-full border rounded-lg p-2.5 bg-slate-50 font-medium focus:bg-white">
+              <option value="heir">Heir / Beneficiary (Read-only)</option>
+              <option value="patriarch">Patriarch / Karta (Admin)</option>
+              <option value="advisor">CA / Legal Advisor (Auditor)</option>
+            </select>
+          </div>
+          <div>
+            <label for="auth-reg-profile-id" class="block font-semibold text-slate-700 mb-1 is-required">Estate Profile ID</label>
+            <input type="number" id="auth-reg-profile-id" required value="1" min="1" class="w-full border rounded-lg p-2.5 bg-slate-50 font-mono focus:bg-white">
+          </div>
+        </div>
+        <div>
+          <label for="auth-reg-password" class="block font-semibold text-slate-700 mb-1 is-required">Password (min 8 chars)</label>
+          <input type="password" id="auth-reg-password" required minlength="8" placeholder="Choose a secure password (min 8 chars)" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:bg-white">
+        </div>
+        <div id="auth-reg-error" class="text-rose-600 text-[11px] font-semibold hidden" role="alert"></div>
+        <div class="pt-2 flex justify-end">
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold transition shadow-sm cursor-pointer">
+            Create Account & Authenticate
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Live Toast Notification Container (WCAG Live Region) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- JavaScript Application Entry -->
+  <script src="/static/js/family_tree.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
