@@ -1,0 +1,59 @@
+# Environment & Secrets
+.env
+.env.local
+.env.production
+*.key
+data/*.key
+
+# Database
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+*.db-journal
+!data/.gitkeep
+
+# Vault encrypted uploads (keep directory, ignore contents)
+storage/encrypted_vault/*
+!storage/encrypted_vault/.gitkeep
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing & linters
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# OS and Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.log
+
+# Local workspace duplicates & test outputs
+VirasatPlanner/
+test_will.pdf
+build_updated_index.py
